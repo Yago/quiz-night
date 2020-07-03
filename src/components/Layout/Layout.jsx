@@ -3,6 +3,7 @@ import React from 'react';
 import { jsx } from '@emotion/core';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
+import tw from 'twin.macro';
 
 const Layout = ({ children }) => (
   <React.Fragment>
@@ -16,7 +17,7 @@ const Layout = ({ children }) => (
       <link rel="stylesheet" type="text/css" href="/nprogress.css" />
     </Head>
 
-    <main>{children}</main>
+    <main tw="container mx-auto p-4">{children}</main>
   </React.Fragment>
 );
 

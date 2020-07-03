@@ -1,3 +1,17 @@
 {
-  "greeting": "Salut salut"
+  "greeting": "Salut salut",
+  "login": "Se connecter",
+  "add": "Ajouter",
+  "quiz_name": "Nom du quiz",
+  "new_quiz": "Nouveau quiz",
+  "sure_to_delete": "Es-tu certain de vouloir supprimer",
+  "yes": "Oui",
+  "remove": "Supprimer",
+  "cancel": "Annuler",
+  "your_quizes": "Vos Quizs",
+  "theaders": [
+    "Titre",
+    "Statut",
+    "Actions"
+  ]
 }

@@ -14,11 +14,9 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <main tw="w-1/2 mx-auto py-6">
-        <h1>
-          {content?.title} : {t('greeting')}
-        </h1>
-      </main>
+      <h1>
+        {content?.title} : {t('greeting')}
+      </h1>
     </Layout>
   );
 };

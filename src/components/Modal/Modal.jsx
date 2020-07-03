@@ -26,7 +26,7 @@ const Modal = ({ open, onClose, small, children }) => (
     css={[!open && tw`opacity-0 pointer-events-none`, { zIndex: 999999 }]}
   >
     <div
-      tw="absolute w-full h-full bg-blue-700 opacity-50"
+      tw="absolute w-full h-full bg-gray-900 opacity-75"
       onClick={() => onClose()}
     />
 

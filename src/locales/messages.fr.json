@@ -11,9 +11,13 @@
   "remove": "Supprimer",
   "cancel": "Annuler",
   "your_quizes": "Vos Quizs",
+  "in_progress": "En cours",
+  "inactive": "Inactif",
+  "paused": "En pause",
   "theaders": [
     "Titre",
     "Statut",
+    "Session",
     "Actions"
   ],
   "form": {

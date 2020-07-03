@@ -1,7 +1,10 @@
 /** @jsx jsx */
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
+import {
+  useCollectionData,
+  useDocumentData,
+} from 'react-firebase-hooks/firestore';
 import { useTranslation } from 'react-i18next';
 import { jsx } from '@emotion/core';
 import { isNil } from 'ramda';
@@ -19,6 +22,8 @@ import { button } from 'styles';
 const HomePage = () => {
   const [t] = useTranslation();
   const [quizzes] = useCollectionData(db.collection('quizzes'));
+  const [sessions] = useCollectionData(db.collection('sessions'));
+  const [currentSession] = useDocumentData(db.doc('sessions/current'));
   const [user] = useAuthState(auth);
   const [modal, openModal] = useState(false);
   const [pending, setPending] = useState(null);
@@ -32,6 +37,21 @@ const HomePage = () => {
 
   const removeQuiz = slug => {
     db.doc(`quizzes/${slug}`).delete();
+  };
+
+  const playQuiz = slug => {
+    const id = currentSession?.inProgress || String(+new Date());
+    db.collection('sessions').doc('current').set({ inProgress: id });
+    db.collection('sessions').doc(id).set({ id, quiz: slug, isPlaying: true });
+  };
+
+  const pauseQuiz = slug => {
+    const id = currentSession?.inProgress;
+    db.collection('sessions').doc(id).set({ id, quiz: slug, isPlaying: false });
+  };
+
+  const stopQuiz = () => {
+    db.collection('sessions').doc('current').set({ inProgress: null });
   };
 
   return (
@@ -53,11 +73,19 @@ const HomePage = () => {
 
           <QuizList
             quizzes={quizzes}
+            session={
+              currentSession?.inProgress
+                ? sessions.filter(i => i.id === currentSession?.inProgress)
+                : null
+            }
             onRemove={removeQuiz}
             onEdit={quiz => {
               openModal(true);
               setPending(quiz);
             }}
+            onPlay={playQuiz}
+            onPause={pauseQuiz}
+            onStop={stopQuiz}
           />
 
           <Modal

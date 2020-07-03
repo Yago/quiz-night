@@ -23,6 +23,10 @@ const base = css`
   &:focus {
     ${tw`outline-none`}
   }
+
+  svg {
+    ${tw`inline-flex`}
+  }
 `;
 
 const primary = css`
@@ -47,6 +51,15 @@ const success = css`
   }
 `;
 
+const gray = css`
+  ${base}
+  ${tw`bg-gray-600 hover:bg-gray-500 active:bg-gray-700`}
+
+  &[disabled] {
+    ${tw`bg-gray-100`}
+  }
+`;
+
 const danger = css`
   ${base}
   ${tw`bg-red-600 hover:bg-red-500 active:bg-red-700`}
@@ -67,4 +80,4 @@ const rounded = tw`
   rounded-full
 `;
 
-export default { primary, success, danger, sm, rounded };
+export default { primary, success, gray, danger, sm, rounded };

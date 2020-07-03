@@ -41,6 +41,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-firebase-hooks": "^2.2.0",
+    "react-hook-form": "^6.0.0",
     "react-i18next": "^11.7.0",
     "slugify": "^1.4.0",
     "tailwindcss": "^1.4.6"

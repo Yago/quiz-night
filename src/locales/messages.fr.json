@@ -6,6 +6,8 @@
   "new_quiz": "Nouveau quiz",
   "sure_to_delete": "Es-tu certain de vouloir supprimer",
   "yes": "Oui",
+  "edit": "Modifier",
+  "duplicate": "Dupliquer",
   "remove": "Supprimer",
   "cancel": "Annuler",
   "your_quizes": "Vos Quizs",
@@ -13,5 +15,14 @@
     "Titre",
     "Statut",
     "Actions"
-  ]
+  ],
+  "form": {
+    "title": "Titre de votre quiz",
+    "question": "Question",
+    "question_title": "Titre de votre question",
+    "answer": "Réponse",
+    "add_question": "ajouter une question",
+    "required": "Ce champ est requis",
+    "save": "Sauvegarder"
+  }
 }

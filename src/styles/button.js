@@ -38,6 +38,15 @@ const primary = css`
   }
 `;
 
+const success = css`
+  ${base}
+  ${tw`bg-green-600 hover:bg-green-500 active:bg-green-700`}
+
+  &[disabled] {
+    ${tw`bg-green-100`}
+  }
+`;
+
 const danger = css`
   ${base}
   ${tw`bg-red-600 hover:bg-red-500 active:bg-red-700`}
@@ -47,7 +56,7 @@ const danger = css`
   }
 `;
 
-const sm = tw`px-3 py-1`;
+const sm = tw`px-2 py-1`;
 const rounded = tw`
   flex
   items-center
@@ -58,4 +67,4 @@ const rounded = tw`
   rounded-full
 `;
 
-export default { primary, danger, sm, rounded };
+export default { primary, success, danger, sm, rounded };

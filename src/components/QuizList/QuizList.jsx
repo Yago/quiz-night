@@ -3,14 +3,15 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { jsx } from '@emotion/core';
 import PropTypes from 'prop-types';
+import { omit } from 'ramda';
 import tw from 'twin.macro';
 
 import Modal from 'components/Modal';
 import { button } from 'styles';
 
-const QuizList = ({ quizzes, onRemove }) => {
+const QuizList = ({ quizzes, onRemove, onEdit }) => {
   const [t] = useTranslation();
-  const [alert, openAlert] = useState(false);
+  const [modal, openModal] = useState(false);
   const [pendingRemove, setPendingRemove] = useState(null);
 
   return (
@@ -24,7 +25,8 @@ const QuizList = ({ quizzes, onRemove }) => {
                   {t('theaders', { returnObjects: true }).map((header, i) => (
                     <th
                       key={`theader-${i}`}
-                      tw="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                      tw="px-6 py-3 border-b border-gray-200 bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                      css={i === 2 ? tw`text-right` : tw`text-left`}
                     >
                       {header}
                     </th>
@@ -34,7 +36,7 @@ const QuizList = ({ quizzes, onRemove }) => {
               <tbody tw="bg-white">
                 {quizzes?.map((quiz, i) => (
                   <tr key={`row-${i}`}>
-                    <td tw="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
+                    <td tw="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-800 font-medium">
                       {quiz.title}
                     </td>
                     <td tw="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
@@ -45,9 +47,27 @@ const QuizList = ({ quizzes, onRemove }) => {
                     <td tw="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                       <button
                         type="button"
-                        css={button.danger}
+                        css={[button.primary, button.sm]}
+                        tw="mr-2"
+                        onClick={() => onEdit(quiz)}
+                      >
+                        <span tw="text-lg mr-2">✎</span>
+                        {t('edit')}
+                      </button>
+                      <button
+                        type="button"
+                        css={[button.primary, button.sm]}
+                        tw="mr-2"
+                        onClick={() => onEdit(omit(['slug'], quiz))}
+                      >
+                        <span tw="text-lg mr-2">❐</span>
+                        {t('duplicate')}
+                      </button>
+                      <button
+                        type="button"
+                        css={[button.danger, button.sm]}
                         onClick={() => {
-                          openAlert(true);
+                          openModal(true);
                           setPendingRemove(quiz);
                         }}
                       >
@@ -63,24 +83,17 @@ const QuizList = ({ quizzes, onRemove }) => {
         </div>
       </div>
 
-      <Modal
-        title={() => (
-          <React.Fragment>
-            {t('sure_to_delete')} <strong>{pendingRemove?.title}</strong> ?
-          </React.Fragment>
-        )}
-        open={alert}
-        onClose={() => openAlert(false)}
-        nopadding
-        small
-      >
-        <div tw="pt-4">
+      <Modal open={modal} onClose={() => openModal(false)} small>
+        <div>
+          <h3 tw="mb-4">
+            {t('sure_to_delete')} <strong>{pendingRemove?.title}</strong>
+          </h3>
           <button
             type="button"
             css={button.primary}
             tw="mr-2"
             onClick={() => {
-              openAlert(false);
+              openModal(false);
               setPendingRemove(null);
             }}
           >
@@ -90,7 +103,7 @@ const QuizList = ({ quizzes, onRemove }) => {
             type="button"
             css={button.danger}
             onClick={() => {
-              openAlert(false);
+              openModal(false);
               onRemove(pendingRemove?.slug);
               setPendingRemove(null);
             }}
@@ -105,6 +118,7 @@ const QuizList = ({ quizzes, onRemove }) => {
 
 QuizList.propTypes = {
   onRemove: PropTypes.func,
+  onEdit: PropTypes.func,
   quizzes: PropTypes.array,
 };
 

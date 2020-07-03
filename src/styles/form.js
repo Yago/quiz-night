@@ -23,6 +23,11 @@ const input = css`
   font-size: 16px !important;
 `;
 
+const inputError = tw`
+  border-red-600
+`;
+
 export default {
   input,
+  inputError,
 };

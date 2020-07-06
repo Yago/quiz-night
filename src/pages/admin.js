@@ -18,7 +18,7 @@ import QuizList from 'components/QuizList';
 import SignIn from 'components/SignIn';
 import { auth, db } from 'services/firebase';
 import { button } from 'styles';
-import { quizDuration } from 'utils';
+import { n, quizDuration } from 'utils';
 
 const HomePage = () => {
   const [t] = useTranslation();
@@ -43,28 +43,47 @@ const HomePage = () => {
   const playQuiz = slug => {
     const [quiz] = quizzes.filter(i => i.slug === slug);
     const id = currentSession?.session || String(+new Date());
+    const [session] = sessions.filter(i => i.id === id);
 
     db.collection('sessions').doc('current').set({
       session: id,
       quiz: slug,
     });
 
+    if (!isNil(session) && !session?.isPlaying) {
+      db.collection('sessions')
+        .doc(id)
+        .set({
+          ...session,
+          endDate: n(session.endDate) + (+new Date() - n(session.pauseDate)),
+          pauseDate: null,
+          isPlaying: true,
+        });
+    } else {
+      db.collection('sessions')
+        .doc(id)
+        .set({
+          id,
+          quiz: slug,
+          isPlaying: true,
+          startDate: +new Date(),
+          pauseDate: null,
+          endDate: +new Date() + quizDuration(quiz),
+        });
+    }
+  };
+
+  const pauseQuiz = () => {
+    const id = currentSession?.session;
+    const [session] = sessions.filter(i => i.id === id);
+
     db.collection('sessions')
       .doc(id)
       .set({
-        id,
-        quiz: slug,
-        isPlaying: true,
-        startDate: +new Date(),
-        pauseDate: null,
-        resumeDate: null,
-        endDate: +new Date() + quizDuration(quiz),
+        ...session,
+        pauseDate: +new Date(),
+        isPlaying: false,
       });
-  };
-
-  const pauseQuiz = slug => {
-    const id = currentSession?.session;
-    db.collection('sessions').doc(id).set({ id, quiz: slug, isPlaying: false });
   };
 
   const stopQuiz = () => {

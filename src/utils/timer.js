@@ -7,9 +7,10 @@ import {
 } from 'date-fns';
 import { isEmpty, isNil } from 'ramda';
 
+import { n } from 'utils';
+
 const leadingZero = nbr => String(nbr).padStart(2, '0');
 const toDate = date => fromUnixTime(date / 1000);
-const n = str => parseInt(str, 10);
 
 export default (session, quiz) => {
   if (isNil(session) || isEmpty(session) || isNil(quiz) || isEmpty(quiz)) {
@@ -27,19 +28,19 @@ export default (session, quiz) => {
     (n(questionsDuration) + n(breaksDuration)) * 1000;
   const remainingQuestionsBreaks = remainingTime / questionsBreaksDuration;
 
-  const questionRatio =
-    n(questionsDuration) / (n(questionsDuration) + n(breaksDuration));
+  const breakRatio =
+    n(breaksDuration) / (n(questionsDuration) + n(breaksDuration));
 
-  const isQuestion = remainingQuestionsBreaks % 1 <= questionRatio;
+  const isQuestion = remainingQuestionsBreaks % 1 > breakRatio;
   const currentQuestion = questions - Math.floor(remainingQuestionsBreaks);
-  const currentBreak = currentQuestion - 1;
+  const currentBreak = currentQuestion;
 
   const remainingTotalTime =
     remainingTime -
     Math.floor(remainingQuestionsBreaks) * questionsBreaksDuration;
   const remainingCurrentTime = isQuestion
-    ? remainingTotalTime
-    : remainingTotalTime - n(questionsDuration) * 1000;
+    ? remainingTotalTime - n(breaksDuration) * 1000
+    : remainingTotalTime;
 
   const minutes = Math.floor(remainingCurrentTime / 1000 / 60);
   const seconds = Math.floor((remainingCurrentTime / 1000) % 60);

@@ -45,7 +45,7 @@ const HomePage = () => {
     <Layout>
       <h1 tw="text-4xl font-bold mb-4">Quiz : {quiz?.title}</h1>
 
-      {!isNil(time?.isCompleted) && !time?.isCompleted && (
+      {!isNil(time?.isCompleted) && !time?.isCompleted && session?.isPlaying && (
         <div>
           {!isNil(time?.isQuestion) && time?.isQuestion && (
             <h1 tw="text-4xl font-bold mb-4">
@@ -64,6 +64,10 @@ const HomePage = () => {
             <h1 tw="text-4xl font-bold mb-4">{time?.timer2}</h1>
           )}
         </div>
+      )}
+
+      {session?.isPlaying === false && (
+        <h1 tw="text-4xl font-bold mb-4">Paused</h1>
       )}
     </Layout>
   );

@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import React, { useState } from 'react';
-import { Copy, Edit, Pause, Play, Square, Trash2 } from 'react-feather';
+import { Cast, Copy, Edit, Pause, Play, Square, Trash2 } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import { jsx } from '@emotion/core';
 import PropTypes from 'prop-types';
-import { omit } from 'ramda';
+import { isNil, omit } from 'ramda';
 import tw from 'twin.macro';
 
 import Modal from 'components/Modal';
@@ -15,6 +15,7 @@ const QuizList = ({
   session,
   onRemove,
   onEdit,
+  onInit,
   onPlay,
   onPause,
   onStop,
@@ -22,18 +23,18 @@ const QuizList = ({
   const [t] = useTranslation();
   const [modal, openModal] = useState(false);
   const [pendingRemove, setPendingRemove] = useState(null);
+  const current = session?.[0];
 
+  const isReady = slug => current?.quiz === slug && !current?.isStarted;
   const isPlaying = slug =>
-    session?.[0]?.quiz === slug && session?.[0]?.isPlaying;
-
+    current?.quiz === slug && current?.isPlaying && current?.isStarted;
   const isPaused = slug =>
-    session?.[0]?.quiz === slug && !session?.[0]?.isPlaying;
+    current?.quiz === slug && !current?.isPlaying && current?.isStarted;
+  const isInactive = slug => current?.quiz !== slug;
 
-  const isInactive = slug => session?.[0]?.quiz !== slug;
-
-  const isInactiveOrPaused = slug =>
-    (session?.[0]?.quiz === slug && !session?.[0]?.isPlaying) ||
-    session?.[0]?.quiz !== slug;
+  const isInitiable = slug => isNil(current?.quiz) && current?.quiz !== slug;
+  const isPlayable = slug =>
+    current?.quiz === slug && (!current?.isPlaying || !current?.isStarted);
 
   return (
     <React.Fragment>
@@ -62,6 +63,11 @@ const QuizList = ({
                     </td>
 
                     <td tw="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                      {isReady(quiz.slug) && (
+                        <span tw="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-200 text-black">
+                          {t('ready')}
+                        </span>
+                      )}
                       {isPlaying(quiz.slug) && (
                         <span tw="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-300 text-black">
                           {t('in_progress')}
@@ -80,7 +86,17 @@ const QuizList = ({
                     </td>
 
                     <td tw="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
-                      {isInactiveOrPaused(quiz.slug) && (
+                      {isInitiable(quiz.slug) && (
+                        <button
+                          type="button"
+                          css={[button.yellow, button.sm]}
+                          tw="mr-2"
+                          onClick={() => onInit(quiz.slug)}
+                        >
+                          <Cast size={18} tw="mb-px" />
+                        </button>
+                      )}
+                      {isPlayable(quiz.slug) && (
                         <button
                           type="button"
                           css={[button.success, button.sm]}
@@ -100,7 +116,9 @@ const QuizList = ({
                           <Pause size={18} tw="mb-px" />
                         </button>
                       )}
-                      {isPlaying(quiz.slug) && (
+                      {(isReady(quiz.slug) ||
+                        isPlaying(quiz.slug) ||
+                        isPaused(quiz.slug)) && (
                         <button
                           type="button"
                           css={[button.danger, button.sm]}
@@ -187,6 +205,7 @@ const QuizList = ({
 QuizList.propTypes = {
   onRemove: PropTypes.func,
   onEdit: PropTypes.func,
+  onInit: PropTypes.func,
   onPlay: PropTypes.func,
   onPause: PropTypes.func,
   onStop: PropTypes.func,

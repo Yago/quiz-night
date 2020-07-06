@@ -66,8 +66,12 @@ const HomePage = () => {
         </div>
       )}
 
-      {session?.isPlaying === false && (
+      {session?.isStarted && session?.isPlaying === false && (
         <h1 tw="text-4xl font-bold mb-4">Paused</h1>
+      )}
+
+      {session?.isStarted === false && (
+        <h1 tw="text-4xl font-bold mb-4">Ready !</h1>
       )}
     </Layout>
   );

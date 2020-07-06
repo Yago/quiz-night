@@ -60,6 +60,15 @@ const gray = css`
   }
 `;
 
+const yellow = css`
+  ${base}
+  ${tw`text-black bg-yellow-400 hover:bg-yellow-300 active:bg-yellow-200`}
+
+  &[disabled] {
+    ${tw`bg-yellow-100`}
+  }
+`;
+
 const danger = css`
   ${base}
   ${tw`bg-red-600 hover:bg-red-500 active:bg-red-700`}
@@ -80,4 +89,4 @@ const rounded = tw`
   rounded-full
 `;
 
-export default { primary, success, gray, danger, sm, rounded };
+export default { primary, success, gray, yellow, danger, sm, rounded };

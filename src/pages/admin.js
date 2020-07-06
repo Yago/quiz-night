@@ -40,37 +40,42 @@ const HomePage = () => {
     db.doc(`quizzes/${slug}`).delete();
   };
 
-  const playQuiz = slug => {
-    const [quiz] = quizzes.filter(i => i.slug === slug);
-    const id = currentSession?.session || String(+new Date());
-    const [session] = sessions.filter(i => i.id === id);
+  const initQuiz = slug => {
+    const id = String(+new Date());
 
     db.collection('sessions').doc('current').set({
       session: id,
       quiz: slug,
     });
 
-    if (!isNil(session) && !session?.isPlaying) {
-      db.collection('sessions')
-        .doc(id)
-        .set({
-          ...session,
-          endDate: n(session.endDate) + (+new Date() - n(session.pauseDate)),
-          pauseDate: null,
-          isPlaying: true,
-        });
-    } else {
-      db.collection('sessions')
-        .doc(id)
-        .set({
-          id,
-          quiz: slug,
-          isPlaying: true,
-          startDate: +new Date(),
-          pauseDate: null,
-          endDate: +new Date() + quizDuration(quiz),
-        });
-    }
+    db.collection('sessions').doc(id).set({
+      id,
+      quiz: slug,
+      isStarted: false,
+      isPlaying: false,
+      pauseDate: null,
+      endDate: null,
+    });
+  };
+
+  const playQuiz = slug => {
+    const id = currentSession?.session;
+    const [quiz] = quizzes.filter(i => i.slug === slug);
+    const [session] = sessions.filter(i => i.id === id);
+
+    const endDate = session?.isStarted
+      ? n(session.endDate) + (+new Date() - n(session.pauseDate))
+      : +new Date() + quizDuration(quiz);
+
+    db.collection('sessions')
+      .doc(id)
+      .set({
+        ...session,
+        endDate,
+        pauseDate: null,
+        isPlaying: true,
+        isStarted: true,
+      });
   };
 
   const pauseQuiz = () => {
@@ -122,6 +127,7 @@ const HomePage = () => {
               openModal(true);
               setPending(quiz);
             }}
+            onInit={initQuiz}
             onPlay={playQuiz}
             onPause={pauseQuiz}
             onStop={stopQuiz}

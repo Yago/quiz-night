@@ -18,6 +18,7 @@ import QuizList from 'components/QuizList';
 import SignIn from 'components/SignIn';
 import { auth, db } from 'services/firebase';
 import { button } from 'styles';
+import { quizDuration } from 'utils';
 
 const HomePage = () => {
   const [t] = useTranslation();
@@ -40,18 +41,37 @@ const HomePage = () => {
   };
 
   const playQuiz = slug => {
-    const id = currentSession?.inProgress || String(+new Date());
-    db.collection('sessions').doc('current').set({ inProgress: id });
-    db.collection('sessions').doc(id).set({ id, quiz: slug, isPlaying: true });
+    const [quiz] = quizzes.filter(i => i.slug === slug);
+    const id = currentSession?.session || String(+new Date());
+
+    db.collection('sessions').doc('current').set({
+      session: id,
+      quiz: slug,
+    });
+
+    db.collection('sessions')
+      .doc(id)
+      .set({
+        id,
+        quiz: slug,
+        isPlaying: true,
+        startDate: +new Date(),
+        pauseDate: null,
+        resumeDate: null,
+        endDate: +new Date() + quizDuration(quiz),
+      });
   };
 
   const pauseQuiz = slug => {
-    const id = currentSession?.inProgress;
+    const id = currentSession?.session;
     db.collection('sessions').doc(id).set({ id, quiz: slug, isPlaying: false });
   };
 
   const stopQuiz = () => {
-    db.collection('sessions').doc('current').set({ inProgress: null });
+    db.collection('sessions').doc('current').set({
+      session: null,
+      slug: null,
+    });
   };
 
   return (
@@ -74,8 +94,8 @@ const HomePage = () => {
           <QuizList
             quizzes={quizzes}
             session={
-              currentSession?.inProgress
-                ? sessions.filter(i => i.id === currentSession?.inProgress)
+              currentSession?.session
+                ? sessions.filter(i => i.id === currentSession?.session)
                 : null
             }
             onRemove={removeQuiz}

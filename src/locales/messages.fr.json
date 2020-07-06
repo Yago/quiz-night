@@ -23,6 +23,7 @@
   "form": {
     "title": "Titre de votre quiz",
     "duration": "Durée par questions (en secondes)",
+    "break_duration": "Durée par pause (en secondes)",
     "question": "Question",
     "question_title": "Titre de votre question",
     "answer": "Réponse",

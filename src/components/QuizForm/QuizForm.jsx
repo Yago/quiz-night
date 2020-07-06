@@ -65,23 +65,48 @@ const QuizForm = ({ onSave, quiz }) => {
         )}
       </div>
 
-      <div tw="mt-4">
-        <label htmlFor="duration" tw="font-medium cursor-pointer">
-          {t('form.duration')}
-        </label>
-        <input
-          id="duration"
-          name="duration"
-          placeholder={t('form.duration')}
-          defaultValue={quiz?.duration}
-          ref={register({ required: true })}
-          css={[form.input, errors.duration && form.inputError]}
-          tw="mt-2"
-          type="number"
-        />
-        {errors.duration && (
-          <div tw="text-red-600 text-sm mt-2 italic">{t('form.required')}</div>
-        )}
+      <div tw="flex flex-wrap space-y-4 -mx-2">
+        <div tw="mt-4 w-1/2 px-2">
+          <label htmlFor="questionsDuration" tw="font-medium cursor-pointer">
+            {t('form.duration')}
+          </label>
+          <input
+            id="questionsDuration"
+            name="questionsDuration"
+            placeholder={t('form.duration')}
+            defaultValue={quiz?.questionsDuration}
+            ref={register({ required: true })}
+            css={[form.input, errors.questionsDuration && form.inputError]}
+            tw="mt-2"
+            type="number"
+          />
+          {errors.questionsDuration && (
+            <div tw="text-red-600 text-sm mt-2 italic">
+              {t('form.required')}
+            </div>
+          )}
+        </div>
+
+        <div tw="mt-4 w-1/2 px-2">
+          <label htmlFor="breaksDuration" tw="font-medium cursor-pointer">
+            {t('form.break_duration')}
+          </label>
+          <input
+            id="breaksDuration"
+            name="breaksDuration"
+            placeholder={t('form.break_duration')}
+            defaultValue={quiz?.breaksDuration}
+            ref={register({ required: true })}
+            css={[form.input, errors.breaksDuration && form.inputError]}
+            tw="mt-2"
+            type="number"
+          />
+          {errors.breaksDuration && (
+            <div tw="text-red-600 text-sm mt-2 italic">
+              {t('form.required')}
+            </div>
+          )}
+        </div>
       </div>
 
       {questions.map((id, i) => (

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /** @jsx jsx */
 import React, { useEffect, useState } from 'react';
@@ -13,7 +14,7 @@ import { button, form } from 'styles';
 
 const QuizForm = ({ onSave, quiz }) => {
   const { t } = useTranslation();
-  const { register, handleSubmit, errors, reset } = useForm();
+  const { register, handleSubmit, errors, reset, getValues } = useForm();
   const [questions, setQuestions] = useState([]);
   const [slug, setSlug] = useState(null);
 
@@ -47,7 +48,7 @@ const QuizForm = ({ onSave, quiz }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} tw="p-2">
       <div>
-        <label htmlFor="title" tw="font-medium">
+        <label htmlFor="title" tw="font-medium cursor-pointer">
           {t('form.title')}
         </label>
         <input
@@ -60,6 +61,25 @@ const QuizForm = ({ onSave, quiz }) => {
           tw="mt-2"
         />
         {errors.title && (
+          <div tw="text-red-600 text-sm mt-2 italic">{t('form.required')}</div>
+        )}
+      </div>
+
+      <div tw="mt-4">
+        <label htmlFor="duration" tw="font-medium cursor-pointer">
+          {t('form.duration')}
+        </label>
+        <input
+          id="duration"
+          name="duration"
+          placeholder={t('form.duration')}
+          defaultValue={quiz?.duration}
+          ref={register({ required: true })}
+          css={[form.input, errors.duration && form.inputError]}
+          tw="mt-2"
+          type="number"
+        />
+        {errors.duration && (
           <div tw="text-red-600 text-sm mt-2 italic">{t('form.required')}</div>
         )}
       </div>
@@ -89,8 +109,16 @@ const QuizForm = ({ onSave, quiz }) => {
               {t('remove')}
             </button>
           </div>
+          {errors?.questions?.[id]?.correct && (
+            <div tw="text-red-600 text-sm mt-2 italic">
+              {t('form.radio_required')}
+            </div>
+          )}
           <div tw="mt-4">
-            <label htmlFor={`questions[${id}].title`} tw="font-medium">
+            <label
+              htmlFor={`questions[${id}].title`}
+              tw="font-medium cursor-pointer"
+            >
               {t('form.question_title')}
             </label>
             <input
@@ -101,11 +129,11 @@ const QuizForm = ({ onSave, quiz }) => {
               ref={register({ required: true })}
               css={[
                 form.input,
-                errors[`questions[${id}].title`] && form.inputError,
+                errors?.questions?.[id]?.title && form.inputError,
               ]}
               tw="mt-2"
             />
-            {errors[`questions[${id}].title`] && (
+            {errors?.questions?.[id]?.title && (
               <div tw="text-red-600 text-sm mt-2 italic">
                 {t('form.required')}
               </div>
@@ -117,7 +145,7 @@ const QuizForm = ({ onSave, quiz }) => {
               <div tw="mt-4 w-1/2 px-2" key={`answer-${id}-${j}`}>
                 <label
                   htmlFor={`questions[${id}].answers[${j}]`}
-                  tw="font-medium"
+                  tw="font-medium cursor-pointer"
                 >
                   {t('form.answer')} #{j + 1}
                 </label>
@@ -129,15 +157,35 @@ const QuizForm = ({ onSave, quiz }) => {
                   ref={register({ required: true })}
                   css={[
                     form.input,
-                    errors[`questions[${id}].answers[${j}]`] && form.inputError,
+                    errors?.questions?.[id]?.answers?.[j] && form.inputError,
                   ]}
                   tw="mt-2"
                 />
-                {errors[`questions[${id}].answers[${j}]`] && (
+                {errors?.questions?.[id]?.answers?.[j] && (
                   <div tw="text-red-600 text-sm mt-2 italic">
                     {t('form.required')}
                   </div>
                 )}
+                <div tw="flex items-center mt-2">
+                  <input
+                    id={`questions[${id}].answers[${j}].radio`}
+                    type="radio"
+                    name={`questions[${id}].correct`}
+                    ref={register({ required: true })}
+                    value={String(j)}
+                    defaultChecked={
+                      getValues(`questions[${id}].correct`) === String(j) ||
+                      quiz?.questions?.[i]?.correct === String(j)
+                    }
+                    tw="mr-2"
+                  />
+                  <label
+                    htmlFor={`questions[${id}].answers[${j}].radio`}
+                    tw="cursor-pointer"
+                  >
+                    {t('form.correct_answer')}
+                  </label>
+                </div>
               </div>
             ))}
           </div>

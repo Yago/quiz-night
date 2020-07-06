@@ -22,11 +22,14 @@
   ],
   "form": {
     "title": "Titre de votre quiz",
+    "duration": "Durée par questions (en secondes)",
     "question": "Question",
     "question_title": "Titre de votre question",
     "answer": "Réponse",
+    "correct_answer": "Réponse correcte",
     "add_question": "ajouter une question",
     "required": "Ce champ est requis",
+    "radio_required": "Merci d'indiquer la réponse correcte",
     "save": "Sauvegarder"
   }
 }

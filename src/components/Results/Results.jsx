@@ -38,42 +38,7 @@ const Question = ({ quiz, session, time, onSelect }) => {
         <table tw="min-w-full m-6">
           {sortBy(prop('score'), session?.players)?.map((player, i) => (
             <tr key={`player-${player.id}`}>
-              <td>{i}</td>
-              <td>{player.name}</td>
-              <td>{player.score}</td>
-            </tr>
-          ))}
-          {sortBy(prop('score'), session?.players)?.map((player, i) => (
-            <tr key={`player-${player.id}`}>
-              <td>{i}</td>
-              <td>{player.name}</td>
-              <td>{player.score}</td>
-            </tr>
-          ))}
-          {sortBy(prop('score'), session?.players)?.map((player, i) => (
-            <tr key={`player-${player.id}`}>
-              <td>{i}</td>
-              <td>{player.name}</td>
-              <td>{player.score}</td>
-            </tr>
-          ))}
-          {sortBy(prop('score'), session?.players)?.map((player, i) => (
-            <tr key={`player-${player.id}`}>
-              <td>{i}</td>
-              <td>{player.name}</td>
-              <td>{player.score}</td>
-            </tr>
-          ))}
-          {sortBy(prop('score'), session?.players)?.map((player, i) => (
-            <tr key={`player-${player.id}`}>
-              <td>{i}</td>
-              <td>{player.name}</td>
-              <td>{player.score}</td>
-            </tr>
-          ))}
-          {sortBy(prop('score'), session?.players)?.map((player, i) => (
-            <tr key={`player-${player.id}`}>
-              <td>{i}</td>
+              <td>{i + 1}</td>
               <td>{player.name}</td>
               <td>{player.score}</td>
             </tr>

@@ -17,6 +17,8 @@
   "paused": "En pause",
   "welcome": "Bienvenue !",
   "welcome_message": "Afin de pouvoir participer, merci de définir un nom de joueur", 
+  "players": "Joueurs",
+  "will_start_soon": "Le quiz va bientôt commencer.",
   "theaders": [
     "Titre",
     "Statut",

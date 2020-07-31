@@ -13,6 +13,7 @@ import { isEmpty, isNil } from 'ramda';
 import tw from 'twin.macro';
 
 import Layout from 'components/Layout';
+import ReadyScreen from 'components/ReadyScreen';
 import SignUp from 'components/SignUp';
 import { useInterval } from 'hooks';
 import { db } from 'services/firebase';
@@ -86,12 +87,7 @@ const HomePage = ({ cookies }) => {
         <h1 tw="text-4xl font-bold mb-4">Paused</h1>
       )}
 
-      {isPlayerReady && (
-        <div>
-          <h1 tw="text-4xl font-bold mb-4">{quiz?.title}</h1>
-          <h1 tw="text-4xl font-bold mb-4">Ready !</h1>
-        </div>
-      )}
+      {isPlayerReady && <ReadyScreen quiz={quiz} session={session} />}
 
       {!isPlayerReady && !isEmpty(session) && (
         <SignUp

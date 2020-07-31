@@ -26,24 +26,50 @@ const HomePage = ({ cookies }) => {
   const [quiz, setQuiz] = useState({});
   const [session, setSession] = useState({});
   const [time, setTime] = useState({});
+  const [isPlayerReady, setIsPlayerReady] = useState(null);
 
   const [quizzes] = useCollectionData(db.collection('quizzes'));
   const [sessions] = useCollectionData(db.collection('sessions'));
   const [currentSession] = useDocumentData(db.doc('sessions/current'));
 
-  const isPlayerReady =
-    !isEmpty(session) &&
-    !isNil(cookie.get('qn_playerid')) &&
-    !isNil(session?.players?.find(i => i.id === cookie.get('qn_playerid')));
+  const updateReadyness = () => {
+    if (!isEmpty(session) && !isNil(cookie.get('qn_playerid'))) {
+      db.doc(`sessions/${session.id}`)
+        .collection('players')
+        .doc(cookie.get('qn_playerid'))
+        .get()
+        .then(doc => setIsPlayerReady(doc.exists));
+    }
+  };
 
   const registerPlayer = name => {
     const id = nanoid();
     cookie.set('qn_playername', name);
     cookie.set('qn_playerid', id);
-    db.doc(`sessions/${session.id}`).update({
-      players: [...session.players, { name, id, score: 0 }],
-    });
+    db.doc(`sessions/${session.id}`)
+      .collection('players')
+      .doc(id)
+      .set({ name, id, score: 0 });
+
+    updateReadyness();
   };
+
+  const setScore = score => {
+    const id = cookie.get('qn_playerid');
+    db.doc(`sessions/${session.id}`)
+      .collection('players')
+      .doc(cookie.get('qn_playerid'))
+      .get()
+      .then(doc => {
+        const previousScore = doc.data()?.score;
+        db.doc(`sessions/${session.id}`)
+          .collection('players')
+          .doc(id)
+          .update({ score: previousScore + score });
+      });
+  };
+
+  useEffect(() => updateReadyness(), [session]);
 
   useEffect(() => {
     if (!isNil(currentSession)) {
@@ -60,19 +86,19 @@ const HomePage = ({ cookies }) => {
   useInterval(() => {
     if (!isEmpty(session) && !isEmpty(quiz) && session.isPlaying)
       setTime(timer(session, quiz));
-  }, 1000);
+  }, 1);
 
   return (
     <Layout>
       {isPlayerReady && session?.isStarted && (
-        <Game time={time} quiz={quiz} session={session} />
+        <Game time={time} quiz={quiz} session={session} onScore={setScore} />
       )}
 
-      {!session?.isStarted && isPlayerReady && (
+      {session?.isStarted === false && isPlayerReady && (
         <ReadyScreen quiz={quiz} session={session} />
       )}
 
-      {!isPlayerReady && !isEmpty(session) && (
+      {isPlayerReady === false && !isEmpty(session) && (
         <SignUp
           onSubmit={({ name }) => registerPlayer(name)}
           name={cookie.get('qn_playername')}

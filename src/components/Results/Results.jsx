@@ -1,13 +1,19 @@
 /** @jsx jsx */
 import React, { useEffect, useState } from 'react';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { jsx } from '@emotion/core'; // eslint-disable-line
 import PropTypes from 'prop-types';
 import { isNil, prop, sortBy } from 'ramda';
 import tw from 'twin.macro';
 
+import { db } from 'services/firebase';
+
 const Question = ({ quiz, session, time, onSelect }) => {
   const [selected, setSelected] = useState(null);
   const question = quiz?.questions?.[time?.currentQuestion - 1];
+  const [players] = useCollectionData(
+    db.doc(`sessions/${session.id}`).collection('players')
+  );
 
   useEffect(() => {
     if (!isNil(selected)) onSelect(selected);
@@ -35,15 +41,17 @@ const Question = ({ quiz, session, time, onSelect }) => {
         className="fade-bottom"
         css={{ height: '50%' }}
       >
-        <table tw="min-w-full m-6">
-          {sortBy(prop('score'), session?.players)?.map((player, i) => (
-            <tr key={`player-${player.id}`}>
-              <td>{i + 1}</td>
-              <td>{player.name}</td>
-              <td>{player.score}</td>
-            </tr>
-          ))}
-        </table>
+        {!isNil(players) && (
+          <table tw="min-w-full m-6">
+            {sortBy(prop('score'), players)?.map((player, i) => (
+              <tr key={`player-${player.id}`}>
+                <td>{i + 1}</td>
+                <td>{player.name}</td>
+                <td>{player.score}</td>
+              </tr>
+            ))}
+          </table>
+        )}
       </div>
     </div>
   );

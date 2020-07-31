@@ -8,7 +8,7 @@ import tw from 'twin.macro';
 import Question from 'components/Question';
 import Results from 'components/Results';
 
-const Game = ({ time, session, quiz }) => (
+const Game = ({ time, session, quiz, onScore }) => (
   <div tw="flex flex-col absolute top-0 bottom-0 right-0 left-0">
     <h1 tw="text-4xl font-bold mb-4">
       {!isNil(time?.timer) && time?.timer}
@@ -18,7 +18,7 @@ const Game = ({ time, session, quiz }) => (
 
     <div tw="flex-1 h-full">
       {!isNil(time?.isQuestion) && time?.isQuestion && (
-        <Question quiz={quiz} time={time} />
+        <Question quiz={quiz} time={time} onSelect={onScore} />
       )}
 
       {!isNil(time?.isQuestion) && !time?.isQuestion && (
@@ -36,8 +36,11 @@ Game.propTypes = {
   time: PropTypes.object,
   quiz: PropTypes.object,
   session: PropTypes.object,
+  onScore: PropTypes.func,
 };
 
-Game.defaultProps = {};
+Game.defaultProps = {
+  onScore: console.log,
+};
 
 export default Game;

@@ -5,12 +5,19 @@ import PropTypes from 'prop-types';
 import { isNil } from 'ramda';
 import tw from 'twin.macro';
 
+import { n } from 'utils';
+
 const Question = ({ quiz, time, onSelect }) => {
   const [selected, setSelected] = useState(null);
   const question = quiz?.questions?.[time?.currentQuestion - 1];
 
   useEffect(() => {
-    if (!isNil(selected)) onSelect(selected);
+    if (!isNil(selected)) {
+      const isCorrect = n(question?.correct) === selected;
+      const maxScore = n(quiz?.questionsDuration) * 1000;
+      const newScore = Math.round((maxScore - time.duration) / 10);
+      onSelect(isCorrect ? newScore : 0);
+    }
   }, [selected]);
 
   useEffect(() => setSelected(null), [quiz]);

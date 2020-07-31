@@ -17,7 +17,7 @@ const Layout = ({ children }) => (
       <link rel="stylesheet" type="text/css" href="/nprogress.css" />
     </Head>
 
-    <main tw="container mx-auto p-4">{children}</main>
+    <main>{children}</main>
   </React.Fragment>
 );
 

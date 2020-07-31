@@ -9,7 +9,7 @@ import tw from 'twin.macro';
 const ReadyScreen = ({ quiz, session }) => {
   const [t] = useTranslation();
   return (
-    <div>
+    <div tw="container mx-auto p-6">
       <h1 tw="text-4xl font-bold">{quiz?.title}</h1>
 
       <p tw="mt-4">{t('will_start_soon')}</p>

@@ -101,59 +101,61 @@ const HomePage = () => {
 
   return (
     <Layout>
-      {!isNil(user) && (
-        <div>
-          <div tw="my-4 md:my-8">
-            <div tw="flex items-center justify-between">
-              <h1 tw="text-4xl font-bold mb-4">{t('your_quizes')}</h1>
-              <button
-                type="button"
-                css={button.success}
-                onClick={() => openModal(true)}
-              >
-                <span tw="text-lg">+</span> {t('new_quiz')}
-              </button>
+      <div tw="container mx-auto p-4">
+        {!isNil(user) && (
+          <div>
+            <div tw="my-4 md:my-8">
+              <div tw="flex items-center justify-between">
+                <h1 tw="text-4xl font-bold mb-4">{t('your_quizes')}</h1>
+                <button
+                  type="button"
+                  css={button.success}
+                  onClick={() => openModal(true)}
+                >
+                  <span tw="text-lg">+</span> {t('new_quiz')}
+                </button>
+              </div>
             </div>
-          </div>
 
-          <QuizList
-            quizzes={quizzes}
-            session={
-              currentSession?.session
-                ? sessions.filter(i => i.id === currentSession?.session)
-                : null
-            }
-            onRemove={removeQuiz}
-            onEdit={quiz => {
-              openModal(true);
-              setPending(quiz);
-            }}
-            onInit={initQuiz}
-            onPlay={playQuiz}
-            onPause={pauseQuiz}
-            onStop={stopQuiz}
-          />
+            <QuizList
+              quizzes={quizzes}
+              session={
+                currentSession?.session
+                  ? sessions.filter(i => i.id === currentSession?.session)
+                  : null
+              }
+              onRemove={removeQuiz}
+              onEdit={quiz => {
+                openModal(true);
+                setPending(quiz);
+              }}
+              onInit={initQuiz}
+              onPlay={playQuiz}
+              onPause={pauseQuiz}
+              onStop={stopQuiz}
+            />
 
-          <Modal
-            open={modal}
-            onClose={() => {
-              openModal(false);
-              setPending(null);
-            }}
-          >
-            <QuizForm
-              onSave={(data, slug) => {
-                createQuiz(data, slug);
+            <Modal
+              open={modal}
+              onClose={() => {
                 openModal(false);
                 setPending(null);
               }}
-              quiz={pending}
-            />
-          </Modal>
-        </div>
-      )}
+            >
+              <QuizForm
+                onSave={(data, slug) => {
+                  createQuiz(data, slug);
+                  openModal(false);
+                  setPending(null);
+                }}
+                quiz={pending}
+              />
+            </Modal>
+          </div>
+        )}
 
-      {isNil(user) && <SignIn />}
+        {isNil(user) && <SignIn />}
+      </div>
     </Layout>
   );
 };

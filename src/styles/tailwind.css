@@ -1,1 +1,18 @@
 @tailwind base;
+
+.fade-bottom {
+  position: relative;
+}
+
+.fade-bottom:after {
+  content: ' ';
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 60%, white 90%);
+
+}

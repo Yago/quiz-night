@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import { isEmpty, isNil } from 'ramda';
 import tw from 'twin.macro';
 
+import Game from 'components/Game';
 import Layout from 'components/Layout';
 import ReadyScreen from 'components/ReadyScreen';
 import SignUp from 'components/SignUp';
@@ -40,7 +41,7 @@ const HomePage = ({ cookies }) => {
     cookie.set('qn_playername', name);
     cookie.set('qn_playerid', id);
     db.doc(`sessions/${session.id}`).update({
-      players: [...session.players, { name, id, points: 0 }],
+      players: [...session.players, { name, id, score: 0 }],
     });
   };
 
@@ -57,37 +58,19 @@ const HomePage = ({ cookies }) => {
   }, [currentSession, sessions, quizzes]);
 
   useInterval(() => {
-    if (!isEmpty(session) && !isEmpty(quiz)) setTime(timer(session, quiz));
+    if (!isEmpty(session) && !isEmpty(quiz) && session.isPlaying)
+      setTime(timer(session, quiz));
   }, 1000);
 
   return (
     <Layout>
-      {!isNil(time?.isCompleted) && !time?.isCompleted && session?.isPlaying && (
-        <div>
-          {!isNil(time?.isQuestion) && time?.isQuestion && (
-            <h1 tw="text-4xl font-bold mb-4">
-              Question #{time?.currentQuestion}
-            </h1>
-          )}
-
-          {!isNil(time?.isQuestion) && !time?.isQuestion && (
-            <h1 tw="text-4xl font-bold mb-4">Results #{time?.currentBreak}</h1>
-          )}
-
-          {!isNil(time?.timer) && (
-            <h1 tw="text-4xl font-bold mb-4">{time?.timer}</h1>
-          )}
-          {!isNil(time?.timer2) && (
-            <h1 tw="text-4xl font-bold mb-4">{time?.timer2}</h1>
-          )}
-        </div>
+      {isPlayerReady && session?.isStarted && (
+        <Game time={time} quiz={quiz} session={session} />
       )}
 
-      {session?.isStarted && session?.isPlaying === false && (
-        <h1 tw="text-4xl font-bold mb-4">Paused</h1>
+      {!session?.isStarted && isPlayerReady && (
+        <ReadyScreen quiz={quiz} session={session} />
       )}
-
-      {isPlayerReady && <ReadyScreen quiz={quiz} session={session} />}
 
       {!isPlayerReady && !isEmpty(session) && (
         <SignUp

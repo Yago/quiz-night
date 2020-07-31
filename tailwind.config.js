@@ -8,6 +8,9 @@ module.exports = {
       flex: {
         '1/2': '0 0 50%',
       },
+      inset: {
+        full: '100%',
+      },
     },
   },
 };

@@ -12,7 +12,7 @@ import { db } from 'services/firebase';
 const ReadyScreen = ({ quiz, session }) => {
   const [t] = useTranslation();
   const [players] = useCollectionData(
-    db.doc(`sessions/${session.id}`).collection('players')
+    db.doc(`sessions/${session.id}`).collection('players').orderBy('name')
   );
 
   return (

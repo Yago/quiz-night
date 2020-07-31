@@ -14,6 +14,7 @@ import tw from 'twin.macro';
 
 import Game from 'components/Game';
 import Layout from 'components/Layout';
+import LeaderBoard from 'components/LeaderBoard';
 import ReadyScreen from 'components/ReadyScreen';
 import SignUp from 'components/SignUp';
 import { useInterval } from 'hooks';
@@ -90,19 +91,23 @@ const HomePage = ({ cookies }) => {
 
   return (
     <Layout>
-      {isPlayerReady && session?.isStarted && (
-        <Game time={time} quiz={quiz} session={session} onScore={setScore} />
-      )}
-
-      {session?.isStarted === false && isPlayerReady && (
-        <ReadyScreen quiz={quiz} session={session} />
-      )}
-
       {isPlayerReady === false && !isEmpty(session) && (
         <SignUp
           onSubmit={({ name }) => registerPlayer(name)}
           name={cookie.get('qn_playername')}
         />
+      )}
+
+      {isPlayerReady && session?.isStarted === false && (
+        <ReadyScreen quiz={quiz} session={session} />
+      )}
+
+      {isPlayerReady && session?.isStarted && time.isCompleted === false && (
+        <Game time={time} quiz={quiz} session={session} onScore={setScore} />
+      )}
+
+      {isPlayerReady && session?.isStarted && time.isCompleted && (
+        <LeaderBoard session={session} />
       )}
 
       {isEmpty(session) && <p>Pas de quiz pour le moment</p>}

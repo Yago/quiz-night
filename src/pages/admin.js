@@ -55,6 +55,7 @@ const HomePage = () => {
       isPlaying: false,
       pauseDate: null,
       endDate: null,
+      players: [],
     });
   };
 

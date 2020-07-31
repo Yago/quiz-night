@@ -15,6 +15,8 @@
   "inactive": "Inactif",
   "ready": "Prêt",
   "paused": "En pause",
+  "welcome": "Bienvenue !",
+  "welcome_message": "Afin de pouvoir participer, merci de définir un nom de joueur", 
   "theaders": [
     "Titre",
     "Statut",
@@ -22,16 +24,18 @@
     "Actions"
   ],
   "form": {
-    "title": "Titre de votre quiz",
-    "duration": "Durée par questions (en secondes)",
-    "break_duration": "Durée par pause (en secondes)",
-    "question": "Question",
-    "question_title": "Titre de votre question",
-    "answer": "Réponse",
-    "correct_answer": "Réponse correcte",
     "add_question": "ajouter une question",
-    "required": "Ce champ est requis",
+    "answer": "Réponse",
+    "break_duration": "Durée par pause (en secondes)",
+    "correct_answer": "Réponse correcte",
+    "duration": "Durée par questions (en secondes)",
+    "enter": "Commencer !",
+    "name": "Nom de joueur",
+    "question_title": "Titre de votre question",
+    "question": "Question",
     "radio_required": "Merci d'indiquer la réponse correcte",
-    "save": "Sauvegarder"
+    "required": "Ce champ est requis",
+    "save": "Sauvegarder",
+    "title": "Titre de votre quiz"
   }
 }

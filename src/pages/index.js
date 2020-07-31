@@ -6,23 +6,42 @@ import {
 } from 'react-firebase-hooks/firestore';
 // import { useTranslation } from 'react-i18next';
 import { jsx } from '@emotion/core';
+import { nanoid } from 'nanoid';
+import { useCookie } from 'next-cookie';
+import PropTypes from 'prop-types';
 import { isEmpty, isNil } from 'ramda';
 import tw from 'twin.macro';
 
 import Layout from 'components/Layout';
+import SignUp from 'components/SignUp';
 import { useInterval } from 'hooks';
 import { db } from 'services/firebase';
 import { timer } from 'utils';
 
-const HomePage = () => {
+const HomePage = ({ cookies }) => {
   // const [t] = useTranslation();
+  const cookie = useCookie(cookies);
+  const [quiz, setQuiz] = useState({});
+  const [session, setSession] = useState({});
+  const [time, setTime] = useState({});
+
   const [quizzes] = useCollectionData(db.collection('quizzes'));
   const [sessions] = useCollectionData(db.collection('sessions'));
   const [currentSession] = useDocumentData(db.doc('sessions/current'));
 
-  const [quiz, setQuiz] = useState({});
-  const [session, setSession] = useState({});
-  const [time, setTime] = useState({});
+  const isPlayerReady =
+    !isEmpty(session) &&
+    !isNil(cookie.get('qn_playerid')) &&
+    !isNil(session?.players?.find(i => i.id === cookie.get('qn_playerid')));
+
+  const registerPlayer = name => {
+    const id = nanoid();
+    cookie.set('qn_playername', name);
+    cookie.set('qn_playerid', id);
+    db.doc(`sessions/${session.id}`).update({
+      players: [...session.players, { name, id, points: 0 }],
+    });
+  };
 
   useEffect(() => {
     if (!isNil(currentSession)) {
@@ -33,7 +52,6 @@ const HomePage = () => {
         i => i.id === currentSession.session
       );
       setSession(newSession || {});
-      setTime(timer(newSession, newQuiz));
     }
   }, [currentSession, sessions, quizzes]);
 
@@ -43,8 +61,6 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <h1 tw="text-4xl font-bold mb-4">Quiz : {quiz?.title}</h1>
-
       {!isNil(time?.isCompleted) && !time?.isCompleted && session?.isPlaying && (
         <div>
           {!isNil(time?.isQuestion) && time?.isQuestion && (
@@ -70,11 +86,33 @@ const HomePage = () => {
         <h1 tw="text-4xl font-bold mb-4">Paused</h1>
       )}
 
-      {session?.isStarted === false && (
-        <h1 tw="text-4xl font-bold mb-4">Ready !</h1>
+      {isPlayerReady && (
+        <div>
+          <h1 tw="text-4xl font-bold mb-4">{quiz?.title}</h1>
+          <h1 tw="text-4xl font-bold mb-4">Ready !</h1>
+        </div>
       )}
+
+      {!isPlayerReady && !isEmpty(session) && (
+        <SignUp
+          onSubmit={({ name }) => registerPlayer(name)}
+          name={cookie.get('qn_playername')}
+        />
+      )}
+
+      {isEmpty(session) && <p>Pas de quiz pour le moment</p>}
     </Layout>
   );
 };
+
+HomePage.getInitialProps = async ctxt => ({
+  cookies: ctxt.req.headers.cookie || '',
+});
+
+HomePage.propTypes = {
+  cookies: PropTypes.string,
+};
+
+HomePage.defaultProps = {};
 
 export default HomePage;

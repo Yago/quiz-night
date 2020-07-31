@@ -17,7 +17,6 @@ export default (session, quiz) => {
     return null;
   }
 
-  // const { startDate, pauseDate, resumeDate, endDate } = session;
   const { endDate } = session;
   const { questionsDuration, breaksDuration } = quiz;
   const questions = quiz?.questions?.length || 0;

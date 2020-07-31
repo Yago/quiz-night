@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import React from 'react';
 import { jsx } from '@emotion/core'; // eslint-disable-line
+import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { isNil } from 'ramda';
 import tw from 'twin.macro';
@@ -10,20 +11,43 @@ import Results from 'components/Results';
 
 const Game = ({ time, session, quiz, onScore }) => (
   <div tw="flex flex-col absolute top-0 bottom-0 right-0 left-0">
-    <h1 tw="text-4xl font-bold mb-4">
-      {!isNil(time?.timer) && time?.timer}
-
-      {!session.isPlaying && ' Pause'}
+    <h1 tw="text-xl font-bold text-center bg-indigo-600 text-white">
+      {!isNil(time?.timer) &&
+        session?.isPlaying &&
+        time?.isQuestion &&
+        time?.timer}
+      {!session.isPlaying && '⏸'}
+      &nbsp;
     </h1>
 
-    <div tw="flex-1 h-full">
-      {!isNil(time?.isQuestion) && time?.isQuestion && (
-        <Question quiz={quiz} time={time} onSelect={onScore} />
-      )}
+    <div tw="relative flex flex-col flex-auto h-full">
+      <AnimatePresence>
+        {!isNil(time?.isQuestion) && time?.isQuestion && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ diration: 0.2 }}
+            tw="absolute top-0 left-0 bottom-0 right-0"
+          >
+            <Question quiz={quiz} time={time} onSelect={onScore} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {!isNil(time?.isQuestion) && !time?.isQuestion && (
-        <Results quiz={quiz} session={session} time={time} />
-      )}
+      <AnimatePresence>
+        {!isNil(time?.isQuestion) && !time?.isQuestion && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ diration: 0.2 }}
+            tw="absolute top-0 left-0 bottom-0 right-0"
+          >
+            <Results quiz={quiz} session={session} time={time} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
 
     {/* {!isNil(time?.timer2) && (

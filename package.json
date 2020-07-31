@@ -31,7 +31,7 @@
     "dotenv": "^8.2.0",
     "eslint": "7.0.0",
     "firebase": "^7.15.3",
-    "framer-motion": "^1.11.1",
+    "framer-motion": "^2.3.0",
     "i18next": "^19.5.1",
     "js-cookie": "^2.2.1",
     "nanoid": "^3.1.10",

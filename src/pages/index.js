@@ -12,9 +12,11 @@ import PropTypes from 'prop-types';
 import { isEmpty, isNil } from 'ramda';
 import tw from 'twin.macro';
 
+import EmptyScreen from 'components/EmptyScreen';
 import Game from 'components/Game';
 import Layout from 'components/Layout';
 import LeaderBoard from 'components/LeaderBoard';
+import PageTransition from 'components/PageTransition';
 import ReadyScreen from 'components/ReadyScreen';
 import SignUp from 'components/SignUp';
 import { useInterval } from 'hooks';
@@ -50,9 +52,10 @@ const HomePage = ({ cookies }) => {
     db.doc(`sessions/${session.id}`)
       .collection('players')
       .doc(id)
-      .set({ name, id, score: 0 });
-
-    updateReadyness();
+      .set({ name, id, score: 0 })
+      .then(() => {
+        updateReadyness();
+      });
   };
 
   const setScore = score => {
@@ -91,26 +94,34 @@ const HomePage = ({ cookies }) => {
 
   return (
     <Layout>
-      {isPlayerReady === false && !isEmpty(session) && (
+      <PageTransition condition={isPlayerReady === false && !isEmpty(session)}>
         <SignUp
           onSubmit={({ name }) => registerPlayer(name)}
           name={cookie.get('qn_playername')}
         />
-      )}
+      </PageTransition>
 
-      {isPlayerReady && session?.isStarted === false && (
+      <PageTransition condition={isPlayerReady && session?.isStarted === false}>
         <ReadyScreen quiz={quiz} session={session} />
-      )}
+      </PageTransition>
 
-      {isPlayerReady && session?.isStarted && time.isCompleted === false && (
+      <PageTransition
+        condition={
+          isPlayerReady && session?.isStarted && time.isCompleted === false
+        }
+      >
         <Game time={time} quiz={quiz} session={session} onScore={setScore} />
-      )}
+      </PageTransition>
 
-      {isPlayerReady && session?.isStarted && time.isCompleted && (
+      <PageTransition
+        condition={isPlayerReady && session?.isStarted && time.isCompleted}
+      >
         <LeaderBoard session={session} />
-      )}
+      </PageTransition>
 
-      {isEmpty(session) && <p>Pas de quiz pour le moment</p>}
+      <PageTransition condition={isEmpty(session)}>
+        <EmptyScreen />
+      </PageTransition>
     </Layout>
   );
 };

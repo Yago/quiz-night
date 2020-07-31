@@ -18,7 +18,8 @@
   "welcome": "Bienvenue !",
   "welcome_message": "Afin de pouvoir participer, merci de définir un nom de joueur", 
   "players": "Joueurs",
-  "will_start_soon": "Le quiz va bientôt commencer.",
+  "will_start_soon": "Le quiz va bientôt commencer !",
+  "nothing_here": "Il n'y a pas de quiz en cours pour l'instant. Reviens plus tard.",
   "theaders": [
     "Titre",
     "Statut",

@@ -14,7 +14,7 @@ const SignUp = ({ name, onSubmit }) => {
   const { register, handleSubmit, errors } = useForm();
 
   return (
-    <div tw="container mx-auto p-4">
+    <div tw="container md:w-1/3 mx-auto p-4">
       <h1 tw="text-4xl font-bold">{t('welcome')}</h1>
       <p tw="mt-4">{t('welcome_message')}</p>
 

@@ -32,17 +32,19 @@ const Question = ({ quiz, time, onSelect }) => {
       </div>
 
       <div
-        tw="flex flex-wrap flex-auto border border-gray-300"
+        tw="flex flex-wrap flex-auto border border-gray-400"
         css={{ height: '50%' }}
       >
         {question?.answers?.map((answer, i) => (
           <button
-            key={`answer-${i}`}
+            key={`answer-${time?.currentQuestion - 1}-${i}`}
             type="button"
-            tw="w-1/2 border-2"
+            tw="w-1/2 border-2 border-gray-400 duration-200 transition-colors"
             css={[
-              selected === i ? tw`border-gray-700` : tw`border-gray-300`,
-              isNil(selected) ? tw`hover:border-gray-700` : tw`cursor-default`,
+              !isNil(selected) && selected === i
+                ? tw`bg-gray-700 text-white`
+                : tw`bg-white`,
+              !isNil(selected) && tw`cursor-default`,
             ]}
             disabled={!isNil(selected)}
             onClick={() => setSelected(i)}

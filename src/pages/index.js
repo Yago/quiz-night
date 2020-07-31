@@ -94,7 +94,11 @@ const HomePage = ({ cookies }) => {
 
   return (
     <Layout>
-      <PageTransition condition={isPlayerReady === false && !isEmpty(session)}>
+      <PageTransition
+        condition={
+          (isNil(isPlayerReady) || isPlayerReady === false) && !isEmpty(session)
+        }
+      >
         <SignUp
           onSubmit={({ name }) => registerPlayer(name)}
           name={cookie.get('qn_playername')}

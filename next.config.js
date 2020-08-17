@@ -16,6 +16,7 @@ module.exports = {
     return config;
   },
   env: {
+    BASE_URL: process.env.BASE_URL,
     FIREBASE_KEY: process.env.FIREBASE_KEY,
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
     FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,

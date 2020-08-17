@@ -23,7 +23,7 @@ const Question = ({ session }: Props): JSX.Element => {
   return (
     <div>
       {!isNil(players) && (
-        <div>
+        <div tw="container mx-auto">
           <div tw="flex items-end p-5">
             {(players as Player[])?.slice(0, 3)?.map((player, i) => (
               <div
@@ -60,12 +60,12 @@ const Question = ({ session }: Props): JSX.Element => {
           </div>
 
           <div tw="px-6">
-            <table tw="w-full mt-24">
+            <table tw="table-fixed w-full mt-24">
               {(players as Player[])?.slice(3)?.map((player, i) => (
                 <tr key={`player-${player.id}`}>
-                  <td>{i + 1}</td>
-                  <td>{player.name}</td>
-                  <td>{player.score}</td>
+                  <td tw="w-12 border-b px-4 py-2 font-bold">{i + 4}</td>
+                  <td tw="border-b px-4 py-2">{player.name}</td>
+                  <td tw="border-b px-4 py-2 text-right">{player.score}</td>
                 </tr>
               ))}
             </table>

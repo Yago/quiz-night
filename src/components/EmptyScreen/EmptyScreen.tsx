@@ -21,7 +21,7 @@ const EmptyScreen = (): JSX.Element => {
       <p tw="p-10">
         <span tw="text-6xl">🤷‍♀️</span>
         <br />
-        {t('nothing_here')}
+        <span tw="text-2xl font-heading">{t('nothing_here')}</span>
       </p>
     </div>
   );

@@ -12,9 +12,10 @@ interface Props {
   quiz: Quiz | null;
   time: Timer;
   onSelect(score: number): void;
+  onAnswer(answer: number): void;
 }
 
-const Question = ({ quiz, time, onSelect }: Props): JSX.Element => {
+const Question = ({ quiz, time, onSelect, onAnswer }: Props): JSX.Element => {
   const [selected, setSelected] = useState<number | null>(null);
   const question = quiz?.questions?.[time?.currentQuestion - 1];
   const openingDeduction = n(quiz?.questionsOpeningDuration) * 1000;
@@ -22,6 +23,7 @@ const Question = ({ quiz, time, onSelect }: Props): JSX.Element => {
 
   useEffect(() => {
     if (!isNil(selected)) {
+      onAnswer(selected);
       const isCorrect = n(question?.correct) === selected;
       const newScore = Math.round(
         (maxScore - time.duration + openingDeduction) / 10

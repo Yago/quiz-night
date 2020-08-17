@@ -11,17 +11,20 @@ import { db } from 'services/firebase';
 interface Props {
   session: Session | null;
   quiz: Quiz | null;
-  time: Timer | null;
+  time: Timer | null | undefined;
 }
 
 const Question = ({ quiz, session, time }: Props): JSX.Element => {
-  const question = quiz?.questions?.[time?.currentQuestion || 0 - 1];
+  const question = !isNil(time?.currentQuestion)
+    ? quiz?.questions?.[(time as Timer).currentQuestion - 1]
+    : null;
   const [players] = useCollectionData(
     db
       .doc(`sessions/${session?.id}`)
       .collection('players')
       .orderBy('score', 'desc')
   );
+
   return (
     <div tw="flex flex-col flex-auto h-full">
       <div

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { jsx } from '@emotion/core'; // eslint-disable-line
 import tw from 'twin.macro';
 
-const EmptyScreen = () => {
+const EmptyScreen = (): JSX.Element => {
   const [t] = useTranslation();
 
   return (

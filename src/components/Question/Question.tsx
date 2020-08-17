@@ -7,7 +7,7 @@ import tw from 'twin.macro';
 
 import { n } from 'utils';
 
-const Question = ({ quiz, time, onSelect }) => {
+const Question = ({ quiz, time, onSelect }): JSX.Element => {
   const [selected, setSelected] = useState(null);
   const question = quiz?.questions?.[time?.currentQuestion - 1];
 

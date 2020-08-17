@@ -5,7 +5,7 @@ import Head from 'next/head';
 import PropTypes from 'prop-types';
 import tw from 'twin.macro';
 
-const Layout = ({ children }) => (
+const Layout = ({ children }): JSX.Element => (
   <React.Fragment>
     <Head>
       <meta

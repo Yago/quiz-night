@@ -8,7 +8,7 @@ import tw from 'twin.macro';
 
 import { db } from 'services/firebase';
 
-const Question = ({ session }) => {
+const Question = ({ session }): JSX.Element => {
   const [players] = useCollectionData(
     db
       .doc(`sessions/${session.id}`)

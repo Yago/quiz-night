@@ -23,7 +23,7 @@ import { useInterval } from 'hooks';
 import { db } from 'services/firebase';
 import { timer } from 'utils';
 
-const HomePage = ({ cookies }) => {
+const HomePage = ({ cookies }): JSX.Element => {
   // const [t] = useTranslation();
   const cookie = useCookie(cookies);
   const [quiz, setQuiz] = useState({});

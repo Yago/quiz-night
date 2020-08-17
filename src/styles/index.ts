@@ -1,2 +1,2 @@
-export button from 'styles/button';
-export form from 'styles/form';
+export { default as button } from 'styles/button';
+export { default as form } from 'styles/form';

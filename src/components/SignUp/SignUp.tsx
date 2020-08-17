@@ -9,7 +9,7 @@ import tw from 'twin.macro';
 
 import { button, form } from 'styles';
 
-const SignUp = ({ name, onSubmit }) => {
+const SignUp = ({ name, onSubmit }): JSX.Element => {
   const [t] = useTranslation();
   const { register, handleSubmit, errors } = useForm();
 

@@ -19,7 +19,7 @@ const QuizList = ({
   onPlay,
   onPause,
   onStop,
-}) => {
+}): JSX.Element => {
   const [t] = useTranslation();
   const [modal, openModal] = useState(false);
   const [pendingRemove, setPendingRemove] = useState(null);

@@ -1,1 +1,1 @@
-export useInterval from 'hooks/useInterval';
+export { default as useInterval } from 'hooks/useInterval';

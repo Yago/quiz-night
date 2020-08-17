@@ -7,7 +7,7 @@ import tw from 'twin.macro';
 
 import { button, form } from 'styles';
 
-const NewQuiz = ({ onSubmit }) => {
+const NewQuiz = ({ onSubmit }): JSX.Element => {
   const input = useRef(null);
   const [t] = useTranslation();
 

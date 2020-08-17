@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import tw from 'twin.macro';
 
-const PageTransition = ({ condition, children }) => (
+const PageTransition = ({ condition, children }): JSX.Element => (
   <AnimatePresence>
     {condition && (
       <motion.div

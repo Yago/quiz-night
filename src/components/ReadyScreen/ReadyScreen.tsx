@@ -9,7 +9,7 @@ import tw from 'twin.macro';
 
 import { db } from 'services/firebase';
 
-const ReadyScreen = ({ quiz, session }) => {
+const ReadyScreen = ({ quiz, session }): JSX.Element => {
   const [t] = useTranslation();
   const [players] = useCollectionData(
     db.doc(`sessions/${session.id}`).collection('players').orderBy('name')

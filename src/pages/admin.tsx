@@ -20,7 +20,7 @@ import { auth, db } from 'services/firebase';
 import { button } from 'styles';
 import { n, quizDuration } from 'utils';
 
-const HomePage = () => {
+const HomePage = (): JSX.Element => {
   const [t] = useTranslation();
   const [quizzes] = useCollectionData(db.collection('quizzes'));
   const [sessions] = useCollectionData(db.collection('sessions'));

@@ -8,7 +8,7 @@ import tw from 'twin.macro';
 
 import { button } from 'styles';
 
-const Modal = ({ open, onClose, small, children }) => (
+const Modal = ({ open, onClose, small, children }): JSX.Element => (
   <div
     tw="
       fixed

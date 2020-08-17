@@ -8,7 +8,7 @@ import tw from 'twin.macro';
 
 import { db } from 'services/firebase';
 
-const Question = ({ quiz, session, time, onSelect }) => {
+const Question = ({ quiz, session, time, onSelect }): JSX.Element => {
   const [selected, setSelected] = useState(null);
   const question = quiz?.questions?.[time?.currentQuestion - 1];
   const [players] = useCollectionData(

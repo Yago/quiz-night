@@ -6,7 +6,7 @@ import tw from 'twin.macro';
 // import PropTypes from 'prop-types';
 import styles from './Blank.styles';
 
-const Blank = () => <div css={styles}>Sup</div>;
+const Blank = (): JSX.Element => <div css={styles}>Sup</div>;
 
 Blank.propTypes = {};
 Blank.defaultProps = {};

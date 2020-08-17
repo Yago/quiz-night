@@ -12,7 +12,7 @@ import tw from 'twin.macro';
 
 import { button, form } from 'styles';
 
-const QuizForm = ({ onSave, quiz }) => {
+const QuizForm = ({ onSave, quiz }): JSX.Element => {
   const { t } = useTranslation();
   const { register, handleSubmit, errors, reset, getValues } = useForm();
   const [questions, setQuestions] = useState([]);

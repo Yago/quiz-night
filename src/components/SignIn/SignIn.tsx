@@ -7,7 +7,7 @@ import tw from 'twin.macro';
 import { auth } from 'services/firebase';
 import { button, form } from 'styles';
 
-const SignIn = () => {
+const SignIn = (): JSX.Element => {
   const [t] = useTranslation();
   const email = useRef(null);
   const password = useRef(null);

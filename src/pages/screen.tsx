@@ -8,7 +8,7 @@ import tw from 'twin.macro';
 import Layout from 'components/Layout';
 import { db } from 'services/firebase';
 
-const HomePage = () => {
+const HomePage = (): JSX.Element => {
   const [t] = useTranslation();
   const [content] = useDocumentData(db.doc('quiz/quiz1'));
 

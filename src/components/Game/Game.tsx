@@ -9,7 +9,7 @@ import tw from 'twin.macro';
 import Question from 'components/Question';
 import Results from 'components/Results';
 
-const Game = ({ time, session, quiz, onScore }) => (
+const Game = ({ time, session, quiz, onScore }): JSX.Element => (
   <div tw="flex flex-col absolute top-0 bottom-0 right-0 left-0">
     <h1 tw="text-xl font-bold text-center bg-indigo-600 text-white">
       {!isNil(time?.timer) &&

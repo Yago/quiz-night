@@ -1,29 +1,27 @@
 /** @jsx jsx */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { jsx } from '@emotion/core'; // eslint-disable-line
-import PropTypes from 'prop-types';
 import { isNil } from 'ramda';
 import tw from 'twin.macro';
+import { Player, Quiz, Session, Timer } from 'types';
 
 import { db } from 'services/firebase';
 
-const Question = ({ quiz, session, time, onSelect }): JSX.Element => {
-  const [selected, setSelected] = useState(null);
-  const question = quiz?.questions?.[time?.currentQuestion - 1];
+interface Props {
+  session: Session | null;
+  quiz: Quiz | null;
+  time: Timer | null;
+}
+
+const Question = ({ quiz, session, time }: Props): JSX.Element => {
+  const question = quiz?.questions?.[time?.currentQuestion || 0 - 1];
   const [players] = useCollectionData(
     db
-      .doc(`sessions/${session.id}`)
+      .doc(`sessions/${session?.id}`)
       .collection('players')
       .orderBy('score', 'desc')
   );
-
-  useEffect(() => {
-    if (!isNil(selected)) onSelect(selected);
-  }, [selected]);
-
-  useEffect(() => setSelected(null), [quiz]);
-
   return (
     <div tw="flex flex-col flex-auto h-full">
       <div
@@ -46,7 +44,7 @@ const Question = ({ quiz, session, time, onSelect }): JSX.Element => {
       >
         {!isNil(players) && (
           <table tw="min-w-full">
-            {players?.map((player, i) => (
+            {(players as Player[])?.map((player, i) => (
               <tr key={`player-${player.id}`}>
                 <td>{i + 1}</td>
                 <td>{player.name}</td>
@@ -58,17 +56,6 @@ const Question = ({ quiz, session, time, onSelect }): JSX.Element => {
       </div>
     </div>
   );
-};
-
-Question.propTypes = {
-  quiz: PropTypes.object,
-  session: PropTypes.object,
-  time: PropTypes.object,
-  onSelect: PropTypes.func,
-};
-
-Question.defaultProps = {
-  onSelect: console.log,
 };
 
 export default Question;

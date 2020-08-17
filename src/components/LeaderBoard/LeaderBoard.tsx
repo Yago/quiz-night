@@ -2,16 +2,20 @@
 import React from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { jsx } from '@emotion/core'; // eslint-disable-line
-import PropTypes from 'prop-types';
 import { isNil } from 'ramda';
 import tw from 'twin.macro';
+import { Player, Session } from 'types';
 
 import { db } from 'services/firebase';
 
-const Question = ({ session }): JSX.Element => {
+interface Props {
+  session: Session | null;
+}
+
+const Question = ({ session }: Props): JSX.Element => {
   const [players] = useCollectionData(
     db
-      .doc(`sessions/${session.id}`)
+      .doc(`sessions/${session?.id}`)
       .collection('players')
       .orderBy('score', 'desc')
   );
@@ -21,7 +25,7 @@ const Question = ({ session }): JSX.Element => {
       {!isNil(players) && (
         <div>
           <div tw="flex items-end p-5">
-            {players?.slice(0, 3)?.map((player, i) => (
+            {(players as Player[])?.slice(0, 3)?.map((player, i) => (
               <div
                 key={`leader-${i}`}
                 tw="relative w-1/3"
@@ -57,7 +61,7 @@ const Question = ({ session }): JSX.Element => {
 
           <div tw="px-6">
             <table tw="w-full mt-24">
-              {players?.slice(3)?.map((player, i) => (
+              {(players as Player[])?.slice(3)?.map((player, i) => (
                 <tr key={`player-${player.id}`}>
                   <td>{i + 1}</td>
                   <td>{player.name}</td>
@@ -70,10 +74,6 @@ const Question = ({ session }): JSX.Element => {
       )}
     </div>
   );
-};
-
-Question.propTypes = {
-  session: PropTypes.object,
 };
 
 Question.defaultProps = {};

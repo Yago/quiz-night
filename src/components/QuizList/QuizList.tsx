@@ -3,12 +3,23 @@ import React, { useState } from 'react';
 import { Cast, Copy, Edit, Pause, Play, Square, Trash2 } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import { jsx } from '@emotion/core';
-import PropTypes from 'prop-types';
 import { isNil, omit } from 'ramda';
 import tw from 'twin.macro';
+import { Quiz, Session } from 'types';
 
 import Modal from 'components/Modal';
 import { button } from 'styles';
+
+interface Props {
+  onEdit(quiz: Quiz): void;
+  onInit(slug: string): void;
+  onPause(slug: string): void;
+  onPlay(slug: string): void;
+  onRemove(slug: string): void;
+  onStop(slug: string): void;
+  quizzes: Quiz[];
+  session: Session[] | null;
+}
 
 const QuizList = ({
   quizzes,
@@ -19,21 +30,23 @@ const QuizList = ({
   onPlay,
   onPause,
   onStop,
-}): JSX.Element => {
+}: Props): JSX.Element => {
   const [t] = useTranslation();
   const [modal, openModal] = useState(false);
-  const [pendingRemove, setPendingRemove] = useState(null);
+  const [pendingRemove, setPendingRemove] = useState<Quiz | null>(null);
   const current = session?.[0];
 
-  const isReady = slug => current?.quiz === slug && !current?.isStarted;
-  const isPlaying = slug =>
+  const isReady = (slug: string) =>
+    current?.quiz === slug && !current?.isStarted;
+  const isPlaying = (slug: string) =>
     current?.quiz === slug && current?.isPlaying && current?.isStarted;
-  const isPaused = slug =>
+  const isPaused = (slug: string) =>
     current?.quiz === slug && !current?.isPlaying && current?.isStarted;
-  const isInactive = slug => current?.quiz !== slug;
+  const isInactive = (slug: string) => current?.quiz !== slug;
 
-  const isInitiable = slug => isNil(current?.quiz) && current?.quiz !== slug;
-  const isPlayable = slug =>
+  const isInitiable = (slug: string) =>
+    isNil(current?.quiz) && current?.quiz !== slug;
+  const isPlayable = (slug: string) =>
     current?.quiz === slug && (!current?.isPlaying || !current?.isStarted);
 
   return (
@@ -44,15 +57,17 @@ const QuizList = ({
             <table tw="min-w-full">
               <thead>
                 <tr>
-                  {t('theaders', { returnObjects: true }).map((header, i) => (
-                    <th
-                      key={`theader-${i}`}
-                      tw="px-6 py-3 border-b border-gray-200 bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                      css={i === 3 ? tw`text-right` : tw`text-left`}
-                    >
-                      {header}
-                    </th>
-                  ))}
+                  {(t('theaders', { returnObjects: true }) as string[]).map(
+                    (header, i) => (
+                      <th
+                        key={`theader-${i}`}
+                        tw="px-6 py-3 border-b border-gray-200 bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                        css={i === 3 ? tw`text-right` : tw`text-left`}
+                      >
+                        {header}
+                      </th>
+                    )
+                  )}
                 </tr>
               </thead>
               <tbody tw="bg-white">
@@ -144,7 +159,7 @@ const QuizList = ({
                         type="button"
                         css={[button.primary, button.sm]}
                         tw="mr-2"
-                        onClick={() => onEdit(omit(['slug'], quiz))}
+                        onClick={() => onEdit(omit(['slug'], quiz) as Quiz)}
                       >
                         <Copy size={18} tw="mr-2" />
                         <span tw="">{t('duplicate')}</span>
@@ -190,7 +205,7 @@ const QuizList = ({
             css={button.danger}
             onClick={() => {
               openModal(false);
-              onRemove(pendingRemove?.slug);
+              onRemove(pendingRemove?.slug as string);
               setPendingRemove(null);
             }}
           >
@@ -200,17 +215,6 @@ const QuizList = ({
       </Modal>
     </React.Fragment>
   );
-};
-
-QuizList.propTypes = {
-  onRemove: PropTypes.func,
-  onEdit: PropTypes.func,
-  onInit: PropTypes.func,
-  onPlay: PropTypes.func,
-  onPause: PropTypes.func,
-  onStop: PropTypes.func,
-  quizzes: PropTypes.array,
-  session: PropTypes.array,
 };
 
 export default QuizList;

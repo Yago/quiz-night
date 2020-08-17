@@ -2,10 +2,13 @@
 import React from 'react';
 import { jsx } from '@emotion/core';
 import Head from 'next/head';
-import PropTypes from 'prop-types';
 import tw from 'twin.macro';
 
-const Layout = ({ children }): JSX.Element => (
+interface Props {
+  children: React.ReactNode;
+}
+
+const Layout = ({ children }: Props): JSX.Element => (
   <React.Fragment>
     <Head>
       <meta
@@ -20,10 +23,6 @@ const Layout = ({ children }): JSX.Element => (
     <main>{children}</main>
   </React.Fragment>
 );
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 Layout.defaultProps = {};
 

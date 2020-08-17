@@ -3,12 +3,18 @@
 /** @jsx jsx */
 import React from 'react';
 import { jsx } from '@emotion/core';
-import PropTypes from 'prop-types';
 import tw from 'twin.macro';
 
 import { button } from 'styles';
 
-const Modal = ({ open, onClose, small, children }): JSX.Element => (
+interface Props {
+  open: boolean;
+  onClose(): void;
+  small: boolean;
+  children: React.ReactNode;
+}
+
+const Modal = ({ open, onClose, small, children }: Props): JSX.Element => (
   <div
     tw="
       fixed
@@ -76,12 +82,6 @@ const Modal = ({ open, onClose, small, children }): JSX.Element => (
     </div>
   </div>
 );
-Modal.propTypes = {
-  children: PropTypes.any,
-  onClose: PropTypes.func,
-  open: PropTypes.bool,
-  small: PropTypes.bool,
-};
 
 Modal.defaultProps = {
   small: false,

@@ -10,6 +10,7 @@ import { jsx } from '@emotion/core';
 import { isNil } from 'ramda';
 import slugify from 'slugify';
 import tw from 'twin.macro';
+import { CurrentSession, Quiz, Session } from 'types';
 
 import Layout from 'components/Layout';
 import Modal from 'components/Modal';
@@ -24,23 +25,25 @@ const HomePage = (): JSX.Element => {
   const [t] = useTranslation();
   const [quizzes] = useCollectionData(db.collection('quizzes'));
   const [sessions] = useCollectionData(db.collection('sessions'));
-  const [currentSession] = useDocumentData(db.doc('sessions/current'));
+  const [currentSession] = useDocumentData<CurrentSession>(
+    db.doc('sessions/current')
+  );
   const [user] = useAuthState(auth);
   const [modal, openModal] = useState(false);
-  const [pending, setPending] = useState(null);
+  const [pending, setPending] = useState<Quiz | null>(null);
 
-  const createQuiz = (quiz, s) => {
+  const createQuiz = (quiz: Quiz, s: string): void => {
     const slug = s || slugify(quiz.title, { lower: true, strict: true });
     db.collection('quizzes')
       .doc(slug)
       .set({ ...quiz, slug });
   };
 
-  const removeQuiz = slug => {
+  const removeQuiz = (slug: string) => {
     db.doc(`quizzes/${slug}`).delete();
   };
 
-  const initQuiz = slug => {
+  const initQuiz = (slug: string) => {
     const id = String(+new Date());
 
     db.collection('sessions').doc('current').set({
@@ -58,10 +61,10 @@ const HomePage = (): JSX.Element => {
     });
   };
 
-  const playQuiz = slug => {
+  const playQuiz = (slug: string) => {
     const id = currentSession?.session;
-    const [quiz] = quizzes.filter(i => i.slug === slug);
-    const [session] = sessions.filter(i => i.id === id);
+    const [quiz] = (quizzes as Quiz[]).filter(i => i.slug === slug);
+    const [session] = (sessions as Session[]).filter(i => i.id === id);
 
     const endDate = session?.isStarted
       ? n(session.endDate) + (+new Date() - n(session.pauseDate))
@@ -80,7 +83,7 @@ const HomePage = (): JSX.Element => {
 
   const pauseQuiz = () => {
     const id = currentSession?.session;
-    const [session] = sessions.filter(i => i.id === id);
+    const [session] = (sessions as Session[]).filter(i => i.id === id);
 
     db.collection('sessions')
       .doc(id)
@@ -117,10 +120,12 @@ const HomePage = (): JSX.Element => {
             </div>
 
             <QuizList
-              quizzes={quizzes}
+              quizzes={quizzes as Quiz[]}
               session={
                 currentSession?.session
-                  ? sessions.filter(i => i.id === currentSession?.session)
+                  ? (sessions as Session[]).filter(
+                      i => i.id === currentSession?.session
+                    )
                   : null
               }
               onRemove={removeQuiz}
@@ -143,7 +148,7 @@ const HomePage = (): JSX.Element => {
             >
               <QuizForm
                 onSave={(data, slug) => {
-                  createQuiz(data, slug);
+                  createQuiz(data, slug as string);
                   openModal(false);
                   setPending(null);
                 }}

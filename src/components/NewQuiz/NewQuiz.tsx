@@ -2,13 +2,16 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { jsx } from '@emotion/core'; // eslint-disable-line
-import PropTypes from 'prop-types';
 import tw from 'twin.macro';
 
 import { button, form } from 'styles';
 
-const NewQuiz = ({ onSubmit }): JSX.Element => {
-  const input = useRef(null);
+interface Props {
+  onSubmit(name: string | undefined): void;
+}
+
+const NewQuiz = ({ onSubmit }: Props): JSX.Element => {
+  const input = useRef<HTMLInputElement>(null);
   const [t] = useTranslation();
 
   return (
@@ -16,7 +19,7 @@ const NewQuiz = ({ onSubmit }): JSX.Element => {
       tw="flex"
       onSubmit={e => {
         e.preventDefault();
-        onSubmit(input.current.value);
+        onSubmit(input?.current?.value);
       }}
     >
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -29,7 +32,7 @@ const NewQuiz = ({ onSubmit }): JSX.Element => {
       />
       <button
         type="button"
-        onClick={() => onSubmit(input.current.value)}
+        onClick={() => onSubmit(input?.current?.value)}
         css={button.primary}
       >
         {t('add')}
@@ -38,9 +41,6 @@ const NewQuiz = ({ onSubmit }): JSX.Element => {
   );
 };
 
-NewQuiz.propTypes = {
-  onSubmit: PropTypes.func,
-};
 NewQuiz.defaultProps = {};
 
 export default NewQuiz;

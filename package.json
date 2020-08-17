@@ -22,6 +22,8 @@
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
     "@reach/alert-dialog": "^0.10.4",
+    "@types/nprogress": "^0.2.0",
+    "@types/ramda": "^0.27.14",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-macros": "^2.8.0",

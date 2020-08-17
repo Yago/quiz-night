@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
+import { isNil } from 'ramda';
 
 // Thanks to Dan Abramov
 // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
-export default (callback, delay) => {
-  const savedCallback = useRef();
+export default (callback: () => void, delay: number) => {
+  const savedCallback = useRef<() => void>();
 
   useEffect(() => {
     savedCallback.current = callback;
@@ -11,7 +12,7 @@ export default (callback, delay) => {
 
   useEffect(() => {
     const tick = () => {
-      savedCallback.current();
+      if (!isNil(savedCallback.current)) savedCallback.current();
     };
 
     const id = setInterval(tick, delay);

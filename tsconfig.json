@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "alwaysStrict": true,
+    "noImplicitAny": false,
     "baseUrl": "src",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -22,6 +23,7 @@
   },
   "include": [
     "**/*.ts",
+    "**/*.d.ts",
     "**/*.tsx"
   ],
   "exclude": [

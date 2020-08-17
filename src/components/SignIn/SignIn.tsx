@@ -9,8 +9,8 @@ import { button, form } from 'styles';
 
 const SignIn = (): JSX.Element => {
   const [t] = useTranslation();
-  const email = useRef(null);
-  const password = useRef(null);
+  const email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
 
   return (
     <div tw="h-screen flex items-center justify-center">
@@ -19,8 +19,8 @@ const SignIn = (): JSX.Element => {
         onSubmit={e => {
           e.preventDefault();
           auth.signInWithEmailAndPassword(
-            email.current.value,
-            password.current.value
+            email?.current?.value as string,
+            password?.current?.value as string
           );
         }}
       >

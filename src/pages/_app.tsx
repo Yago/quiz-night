@@ -2,7 +2,6 @@ import React from 'react';
 import App from 'next/app';
 import Router from 'next/router';
 import NProgress from 'nprogress';
-import PropTypes from 'prop-types';
 
 import 'locales/i18n';
 
@@ -26,12 +25,5 @@ class QuizNightApp extends App {
     return <Component {...pageProps} />;
   }
 }
-
-QuizNightApp.propTypes = {
-  Component: PropTypes.any,
-  pageProps: PropTypes.object,
-  router: PropTypes.object,
-  store: PropTypes.object,
-};
 
 export default QuizNightApp;

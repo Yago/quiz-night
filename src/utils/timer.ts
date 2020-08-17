@@ -6,13 +6,14 @@ import {
   isAfter,
 } from 'date-fns';
 import { isEmpty, isNil } from 'ramda';
+import { Quiz, Session, Timer } from 'types';
 
 import { n } from 'utils';
 
-const leadingZero = nbr => String(nbr).padStart(2, '0');
-const toDate = date => fromUnixTime(date / 1000);
+const leadingZero = (nbr: number): string => String(nbr).padStart(2, '0');
+const toDate = (date: number): Date => fromUnixTime(date / 1000);
 
-export default (session, quiz) => {
+export default (session: Session, quiz: Quiz): Timer | null => {
   if (isNil(session) || isEmpty(session) || isNil(quiz) || isEmpty(quiz)) {
     return null;
   }

@@ -1,14 +1,20 @@
 /** @jsx jsx */
 import React, { useEffect, useState } from 'react';
 import { jsx } from '@emotion/core'; // eslint-disable-line
-import PropTypes from 'prop-types';
 import { isNil } from 'ramda';
 import tw from 'twin.macro';
+import { Quiz, Timer } from 'types';
 
 import { n } from 'utils';
 
-const Question = ({ quiz, time, onSelect }): JSX.Element => {
-  const [selected, setSelected] = useState(null);
+interface Props {
+  quiz: Quiz | null;
+  time: Timer;
+  onSelect(score: number): void;
+}
+
+const Question = ({ quiz, time, onSelect }: Props): JSX.Element => {
+  const [selected, setSelected] = useState<number | null>(null);
   const question = quiz?.questions?.[time?.currentQuestion - 1];
 
   useEffect(() => {
@@ -18,6 +24,7 @@ const Question = ({ quiz, time, onSelect }): JSX.Element => {
       const newScore = Math.round((maxScore - time.duration) / 10);
       onSelect(isCorrect ? newScore : 0);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   useEffect(() => setSelected(null), [quiz]);
@@ -55,12 +62,6 @@ const Question = ({ quiz, time, onSelect }): JSX.Element => {
       </div>
     </div>
   );
-};
-
-Question.propTypes = {
-  quiz: PropTypes.object,
-  time: PropTypes.object,
-  onSelect: PropTypes.func,
 };
 
 Question.defaultProps = {

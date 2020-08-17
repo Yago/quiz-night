@@ -1,4 +1,2 @@
-const defaultLng = 'fr';
-exports.defaultLng = defaultLng;
-
-exports.lngs = [defaultLng];
+export const defaultLng = 'fr';
+export const lngs: string[] = [defaultLng];

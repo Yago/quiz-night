@@ -27,7 +27,6 @@ const EmptyScreen = (): JSX.Element => {
   );
 };
 
-EmptyScreen.propTypes = {};
 EmptyScreen.defaultProps = {};
 
 export default EmptyScreen;

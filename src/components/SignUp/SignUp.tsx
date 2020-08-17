@@ -4,12 +4,16 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { jsx } from '@emotion/core'; // eslint-disable-line
-import PropTypes from 'prop-types';
 import tw from 'twin.macro';
 
 import { button, form } from 'styles';
 
-const SignUp = ({ name, onSubmit }): JSX.Element => {
+interface Props {
+  name: string;
+  onSubmit(data: { name: string }): void;
+}
+
+const SignUp = ({ name, onSubmit }: Props): JSX.Element => {
   const [t] = useTranslation();
   const { register, handleSubmit, errors } = useForm();
 
@@ -33,16 +37,15 @@ const SignUp = ({ name, onSubmit }): JSX.Element => {
         )}
 
         <div tw="mt-6">
-          <input type="submit" css={button.success} value={t('form.enter')} />
+          <input
+            type="submit"
+            css={button.success}
+            value={t('form.enter') as string}
+          />
         </div>
       </form>
     </div>
   );
-};
-
-SignUp.propTypes = {
-  name: PropTypes.string,
-  onSubmit: PropTypes.func,
 };
 
 SignUp.defaultProps = {

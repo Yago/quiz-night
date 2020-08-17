@@ -3,16 +3,21 @@ import React from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useTranslation } from 'react-i18next';
 import { jsx } from '@emotion/core'; // eslint-disable-line
-import PropTypes from 'prop-types';
 import { isNil, prop, sortBy } from 'ramda';
 import tw from 'twin.macro';
+import { Player, Quiz, Session } from 'types';
 
 import { db } from 'services/firebase';
 
-const ReadyScreen = ({ quiz, session }): JSX.Element => {
+interface Props {
+  session: Session | null;
+  quiz: Quiz | null;
+}
+
+const ReadyScreen = ({ quiz, session }: Props): JSX.Element => {
   const [t] = useTranslation();
   const [players] = useCollectionData(
-    db.doc(`sessions/${session.id}`).collection('players').orderBy('name')
+    db.doc(`sessions/${session?.id}`).collection('players').orderBy('name')
   );
 
   return (
@@ -25,7 +30,7 @@ const ReadyScreen = ({ quiz, session }): JSX.Element => {
 
       {!isNil(players) && (
         <ul tw="mt-2">
-          {sortBy(prop('name'), players)?.map(player => (
+          {sortBy(prop('name'), players as Player[])?.map(player => (
             <li key={`player-${player.id}`}>{player.name}</li>
           ))}
         </ul>
@@ -34,10 +39,6 @@ const ReadyScreen = ({ quiz, session }): JSX.Element => {
   );
 };
 
-ReadyScreen.propTypes = {
-  quiz: PropTypes.object,
-  session: PropTypes.object,
-};
 ReadyScreen.defaultProps = {};
 
 export default ReadyScreen;

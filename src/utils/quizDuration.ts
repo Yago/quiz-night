@@ -1,8 +1,9 @@
 import { isNil } from 'ramda';
+import { Quiz } from 'types';
 
 import { n } from 'utils';
 
-export default quiz => {
+export default (quiz: Quiz): number => {
   if (isNil(quiz)) return 0;
 
   const questions = quiz.questions.length;

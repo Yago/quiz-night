@@ -2,21 +2,28 @@
 import React from 'react';
 import { jsx } from '@emotion/core'; // eslint-disable-line
 import { AnimatePresence, motion } from 'framer-motion';
-import PropTypes from 'prop-types';
 import { isNil } from 'ramda';
 import tw from 'twin.macro';
+import { Quiz, Session, Timer } from 'types';
 
 import Question from 'components/Question';
 import Results from 'components/Results';
 
-const Game = ({ time, session, quiz, onScore }): JSX.Element => (
+interface Props {
+  time: Timer | null;
+  quiz: Quiz | null;
+  session: Session | null;
+  onScore(score: number): void;
+}
+
+const Game = ({ time, session, quiz, onScore }: Props): JSX.Element => (
   <div tw="flex flex-col absolute top-0 bottom-0 right-0 left-0">
     <h1 tw="text-xl font-bold text-center bg-indigo-600 text-white">
       {!isNil(time?.timer) &&
         session?.isPlaying &&
         time?.isQuestion &&
         time?.timer}
-      {!session.isPlaying && '⏸'}
+      {!session?.isPlaying && '⏸'}
       &nbsp;
     </h1>
 
@@ -55,13 +62,6 @@ const Game = ({ time, session, quiz, onScore }): JSX.Element => (
     )} */}
   </div>
 );
-
-Game.propTypes = {
-  time: PropTypes.object,
-  quiz: PropTypes.object,
-  session: PropTypes.object,
-  onScore: PropTypes.func,
-};
 
 Game.defaultProps = {
   onScore: console.log,

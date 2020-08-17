@@ -2,10 +2,14 @@
 import React from 'react';
 import { jsx } from '@emotion/core'; // eslint-disable-line
 import { AnimatePresence, motion } from 'framer-motion';
-import PropTypes from 'prop-types';
 import tw from 'twin.macro';
 
-const PageTransition = ({ condition, children }): JSX.Element => (
+interface Props {
+  condition: boolean | null | undefined;
+  children: React.ReactNode;
+}
+
+const PageTransition = ({ condition, children }: Props): JSX.Element => (
   <AnimatePresence>
     {condition && (
       <motion.div
@@ -21,13 +25,6 @@ const PageTransition = ({ condition, children }): JSX.Element => (
   </AnimatePresence>
 );
 
-PageTransition.propTypes = {
-  condition: PropTypes.bool,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
-};
 PageTransition.defaultProps = {};
 
 export default PageTransition;

@@ -6,32 +6,38 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { jsx } from '@emotion/core'; // eslint-disable-line
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
 import { indexOf, isNil, move, range, values } from 'ramda';
 import tw from 'twin.macro';
+import { Question, Quiz } from 'types';
 
 import { button, form } from 'styles';
+import { n } from 'utils';
 
-const QuizForm = ({ onSave, quiz }): JSX.Element => {
+interface Props {
+  onSave(quiz: Quiz, slug: string | null): void;
+  quiz: Quiz | null;
+}
+
+const QuizForm = ({ onSave, quiz }: Props): JSX.Element => {
   const { t } = useTranslation();
   const { register, handleSubmit, errors, reset, getValues } = useForm();
-  const [questions, setQuestions] = useState([]);
-  const [slug, setSlug] = useState(null);
+  const [questions, setQuestions] = useState<string[] | never[]>([]);
+  const [slug, setSlug] = useState<string | null>(null);
 
   const addQuestion = () => {
     setQuestions([...questions, nanoid().replace(/-/g, '')]);
   };
 
-  const moveQuestion = (id, i) => {
-    setQuestions(move(indexOf(id, questions), i, questions));
+  const moveQuestion = (id: string, i: number | string) => {
+    setQuestions(move(indexOf(id, questions), n(i), questions));
   };
 
-  const removeQuestion = id => {
+  const removeQuestion = (id: string) => {
     setQuestions(questions.filter(i => i !== id));
   };
 
-  const onSubmit = data => {
-    onSave({ ...data, questions: values(data.questions) }, slug);
+  const onSubmit = (data: Quiz) => {
+    onSave({ ...data, questions: values(data.questions) as Question[] }, slug);
   };
 
   useEffect(() => {
@@ -109,7 +115,7 @@ const QuizForm = ({ onSave, quiz }): JSX.Element => {
         </div>
       </div>
 
-      {questions.map((id, i) => (
+      {(questions as string[]).map((id, i) => (
         <div key={`question-${id}`} tw="mt-6 border-t border-gray-400 pt-4">
           <div tw="flex justify-between items-center">
             <h2 tw="text-xl text-indigo-600">
@@ -228,16 +234,16 @@ const QuizForm = ({ onSave, quiz }): JSX.Element => {
       </div>
 
       <div tw="mt-6">
-        <input type="submit" css={button.success} value={t('form.save')} />
+        <input
+          type="submit"
+          css={button.success}
+          value={t('form.save') as string}
+        />
       </div>
     </form>
   );
 };
 
-QuizForm.propTypes = {
-  quiz: PropTypes.object,
-  onSave: PropTypes.func,
-};
 QuizForm.defaultProps = {};
 
 export default QuizForm;

@@ -29,9 +29,11 @@
   "form": {
     "add_question": "ajouter une question",
     "answer": "Réponse",
-    "break_duration": "Durée par pause (en secondes)",
+    "break_duration": "Temps de présentation des résultats (en secondes)",
     "correct_answer": "Réponse correcte",
-    "duration": "Durée par questions (en secondes)",
+    "duration": "Temps de réponse (en secondes)",
+    "opening_duration": "Durée de présentation de la question (en secondes)",
+    "duration_help": "Durée pendant laquelle les joueurs peuvent lire et choisir une réponse",
     "enter": "Commencer !",
     "name": "Nom de joueur",
     "question_title": "Titre de votre question",

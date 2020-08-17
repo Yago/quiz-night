@@ -72,7 +72,7 @@ const QuizForm = ({ onSave, quiz }: Props): JSX.Element => {
       </div>
 
       <div tw="flex flex-wrap space-y-4 -mx-2">
-        <div tw="mt-4 w-1/2 px-2">
+        <div tw="mt-4 w-full px-2">
           <label htmlFor="questionsDuration" tw="font-medium cursor-pointer">
             {t('form.duration')}
           </label>
@@ -86,7 +86,32 @@ const QuizForm = ({ onSave, quiz }: Props): JSX.Element => {
             tw="mt-2"
             type="number"
           />
+          <div tw="text-sm mt-2 italic">{t('form.duration_help')}</div>
           {errors.questionsDuration && (
+            <div tw="text-red-600 text-sm mt-2 italic">
+              {t('form.required')}
+            </div>
+          )}
+        </div>
+
+        <div tw="mt-4 w-1/2 px-2">
+          <label htmlFor="questionsDuration" tw="font-medium cursor-pointer">
+            {t('form.opening_duration')}
+          </label>
+          <input
+            id="questionsOpeningDuration"
+            name="questionsOpeningDuration"
+            placeholder={t('form.duration')}
+            defaultValue={quiz?.questionsOpeningDuration}
+            ref={register({ required: true })}
+            css={[
+              form.input,
+              errors.questionsOpeningDuration && form.inputError,
+            ]}
+            tw="mt-2"
+            type="number"
+          />
+          {errors.questionsOpeningDuration && (
             <div tw="text-red-600 text-sm mt-2 italic">
               {t('form.required')}
             </div>

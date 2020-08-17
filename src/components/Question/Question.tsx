@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import React, { useEffect, useState } from 'react';
 import { jsx } from '@emotion/core'; // eslint-disable-line
+import { AnimatePresence, motion } from 'framer-motion';
 import { isNil } from 'ramda';
 import tw from 'twin.macro';
 import { Quiz, Timer } from 'types';
@@ -16,12 +17,15 @@ interface Props {
 const Question = ({ quiz, time, onSelect }: Props): JSX.Element => {
   const [selected, setSelected] = useState<number | null>(null);
   const question = quiz?.questions?.[time?.currentQuestion - 1];
+  const openingDeduction = n(quiz?.questionsOpeningDuration) * 1000;
+  const maxScore = n(quiz?.questionsDuration) * 1000;
 
   useEffect(() => {
     if (!isNil(selected)) {
       const isCorrect = n(question?.correct) === selected;
-      const maxScore = n(quiz?.questionsDuration) * 1000;
-      const newScore = Math.round((maxScore - time.duration) / 10);
+      const newScore = Math.round(
+        (maxScore - time.duration + openingDeduction) / 10
+      );
       onSelect(isCorrect ? newScore : 0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,23 +46,30 @@ const Question = ({ quiz, time, onSelect }: Props): JSX.Element => {
         tw="flex flex-wrap flex-auto border border-gray-400"
         css={{ height: '50%' }}
       >
-        {question?.answers?.map((answer, i) => (
-          <button
-            key={`answer-${time?.currentQuestion - 1}-${i}`}
-            type="button"
-            tw="w-1/2 border-2 border-gray-400 duration-200 transition-colors"
-            css={[
-              !isNil(selected) && selected === i
-                ? tw`bg-gray-700 text-white`
-                : tw`bg-white`,
-              !isNil(selected) && tw`cursor-default`,
-            ]}
-            disabled={!isNil(selected)}
-            onClick={() => setSelected(i)}
-          >
-            {answer}
-          </button>
-        ))}
+        <AnimatePresence>
+          {time.duration >= openingDeduction &&
+            question?.answers?.map((answer, i) => (
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ diration: 0.2 }}
+                key={`answer-${time?.currentQuestion - 1}-${i}`}
+                type="button"
+                tw="w-1/2 border-2 border-gray-400 duration-200 transition-colors"
+                css={[
+                  !isNil(selected) && selected === i
+                    ? tw`bg-gray-700 text-white`
+                    : tw`bg-white`,
+                  !isNil(selected) && tw`cursor-default`,
+                ]}
+                disabled={!isNil(selected)}
+                onClick={() => setSelected(i)}
+              >
+                {answer}
+              </motion.button>
+            ))}
+        </AnimatePresence>
       </div>
     </div>
   );

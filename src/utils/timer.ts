@@ -19,17 +19,19 @@ export default (session: Session, quiz: Quiz): Timer | null => {
   }
 
   const { endDate } = session;
-  const { questionsDuration, breaksDuration } = quiz;
+  const { questionsDuration, questionsOpeningDuration, breaksDuration } = quiz;
   const questions = quiz?.questions?.length || 0;
 
   const remainingTime =
     differenceInMilliseconds(new Date(), toDate(endDate)) * -1;
   const questionsBreaksDuration =
-    (n(questionsDuration) + n(breaksDuration)) * 1000;
+    (n(questionsDuration) + n(questionsOpeningDuration) + n(breaksDuration)) *
+    1000;
   const remainingQuestionsBreaks = remainingTime / questionsBreaksDuration;
 
   const breakRatio =
-    n(breaksDuration) / (n(questionsDuration) + n(breaksDuration));
+    n(breaksDuration) /
+    (n(questionsDuration) + n(questionsOpeningDuration) + n(breaksDuration));
 
   const isQuestion = remainingQuestionsBreaks % 1 > breakRatio;
   const currentQuestion = questions - Math.floor(remainingQuestionsBreaks);
@@ -47,7 +49,8 @@ export default (session: Session, quiz: Quiz): Timer | null => {
   const timer = `${leadingZero(minutes)}:${leadingZero((seconds % 60) + 1)}`;
 
   const duration = isQuestion
-    ? n(questionsDuration) * 1000 - remainingCurrentTime
+    ? (n(questionsDuration) + n(questionsOpeningDuration)) * 1000 -
+      remainingCurrentTime
     : 0;
 
   // const minutes2 = differenceInMinutes(new Date(), toDate(endDate)) * -1;

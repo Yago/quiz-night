@@ -8,6 +8,7 @@ export interface Quiz {
   breaksDuration: string;
   questions: Question[];
   questionsDuration: string;
+  questionsOpeningDuration: string;
   slug: string;
   title: string;
 }

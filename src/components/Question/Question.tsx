@@ -41,7 +41,9 @@ const Question = ({ quiz, time, onSelect, onAnswer }: Props): JSX.Element => {
         tw="bg-gray-300 flex-auto flex items-center px-6"
         css={{ height: '50%' }}
       >
-        <h1 tw="text-4xl font-bold w-full text-center">{question?.title}</h1>
+        <h1 tw="text-2xl md:text-4xl font-bold w-full text-center">
+          {question?.title}
+        </h1>
       </div>
 
       <div

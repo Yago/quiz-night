@@ -35,7 +35,7 @@ const Question = ({ quiz, session, time, lastAnswer }: Props): JSX.Element => {
         tw="bg-gray-300 flex-auto flex flex-col items-center justify-center px-6"
         css={{ height: '50%' }}
       >
-        <h1 tw="text-4xl font-bold w-full text-center">
+        <h1 tw="text-2xl md:text-4xl font-bold w-full text-center">
           {question?.title}
           <br />
           <span tw="text-green-600">

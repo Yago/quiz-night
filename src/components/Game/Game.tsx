@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import React, { useState } from 'react';
+import { Pause } from 'react-feather';
 import { jsx } from '@emotion/core'; // eslint-disable-line
 import { AnimatePresence, motion } from 'framer-motion';
 import { isNil } from 'ramda';
@@ -23,7 +24,7 @@ const Game = ({ time, session, quiz, onScore }: Props): JSX.Element => {
     <div tw="flex flex-col absolute top-0 bottom-0 right-0 left-0">
       <h1 tw="text-xl font-bold text-center bg-green-600 text-white">
         {!isNil(time?.timer) && session?.isPlaying && time?.timer}
-        {!session?.isPlaying && '⏸'}
+        {!session?.isPlaying && <Pause size={20} tw="inline pb-1" />}
         &nbsp;
       </h1>
 
